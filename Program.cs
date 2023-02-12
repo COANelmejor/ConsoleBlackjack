@@ -2,10 +2,11 @@
 // See https://aka.ms/new-console-template for more information
 // Console.WriteLine("Hello, World!");
 
-int totalJugador = 0,
-    totalDealer = 0;
+int     totalJugador = 0,
+        totalDealer = 0;
 
-string message;
+string  message;
+var     pedirCarta = String.Empty;
 
 string[] Baraja = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
@@ -27,12 +28,14 @@ Console.WriteLine("Listo Jugador?");
 while (totalJugador < 21) {
     {
         Console.WriteLine("¿Desea pedir otra carta? (s/n)");
-        if (Console.ReadLine() == "s") {
+
+        pedirCarta = Console.ReadLine();
+        if (pedirCarta == "s") {
             // Obtener carta
             int cartaATomar = random.Next(1, 11);
             string carta = Baraja[cartaATomar];
             cartasJugador = $"{cartasJugador} {carta}";
-            
+
             // Eliminar carta de la Baraja
             Baraja = Baraja.Where(val => val != carta).ToArray();
 
@@ -64,8 +67,10 @@ while (totalJugador < 21) {
 
             // Imprimir listado de cartas
             Console.WriteLine($"Total: {totalJugador} | Cartas:{cartasJugador}");
-        } else {
+        } else if (pedirCarta == "n") { 
             break;
+        } else {
+            Console.WriteLine("Parfavor solo usa 's' o 'n' minúsculas.");
         }
 
     }

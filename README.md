@@ -7,3 +7,7 @@ Pequeño juego de Blackjack que puede correr en la consola.
 ## The Game Works NOW
 
 At this moment you can clone the repo and it will work with some issues that needs to be resolved.
+
+(Issues of Logic, Not in Code)
+
+Have Fun!!! :D

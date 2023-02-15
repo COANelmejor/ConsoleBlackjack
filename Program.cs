@@ -52,7 +52,7 @@ while (totalJugador < 21) {
 
                 // Mostrar Carta en Baraja (Solo para Debug)
                 // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-                Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
+                // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
 
                 // Mostrar Estado actual del jugador
                 Console.WriteLine($"Total: {totalJugador} | Cartas:{cartasJugador}");
@@ -86,7 +86,7 @@ if (totalJugador != 21 && totalJugador < 21) {
 
         // Mostrar Carta en Baraja (Solo para Debug)
         // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-        Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
+        // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
 
         // Mostrar estado actual del Dealer
         Thread.Sleep(750);

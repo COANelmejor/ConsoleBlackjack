@@ -9,15 +9,15 @@ int     totalJugador,
 var     pedirCarta = String.Empty;
 var     volverAJugar = String.Empty;
 
-string cartasJugador = String.Empty;
-string cartasDealer = String.Empty;
+string  cartasJugador = String.Empty;
+string  cartasDealer = String.Empty;
 
 string[] Baraja = {
-    "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
-    "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
-    "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
-    "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
-};
+            "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
+            "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
+            "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
+            "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
+        };
 
 juegoInicia:
 
@@ -33,7 +33,7 @@ Console.WriteLine("Listo Jugador?");
 while (totalJugador < 21) {
     {
         Console.WriteLine("¿Desea pedir otra carta? (s/n)");
-
+        RevisarBaraja();
         pedirCarta = Console.ReadLine();
         switch (pedirCarta) {
             case "s":
@@ -50,9 +50,9 @@ while (totalJugador < 21) {
                 string valorCarta = carta.Substring(0, carta.Length - 1);
                 totalJugador += CalcularValorCarta(valorCarta, totalJugador);
 
-                // Mostrar Carta en Baraja
+                // Mostrar Carta en Baraja (Solo para Debug)
                 // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-                // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
+                Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
 
                 // Mostrar Estado actual del jugador
                 Console.WriteLine($"Total: {totalJugador} | Cartas:{cartasJugador}");
@@ -72,6 +72,7 @@ jugadorTermina:
 if (totalJugador != 21 && totalJugador < 21) {
     Console.WriteLine("Dealer Juega");
     while (totalDealer < 21) {
+        RevisarBaraja();
         cartaATomar = random.Next(0, Baraja.Length);
         string carta = Baraja[cartaATomar];
         cartasDealer = $"{cartasDealer} {carta}";
@@ -79,14 +80,13 @@ if (totalJugador != 21 && totalJugador < 21) {
         // Eliminar carta de la Baraja
         Baraja = Baraja.Where(val => val != carta).ToArray();
 
-        // Calcualr valor de la carta
+        // Calcular valor de la carta
         string valorCarta = carta.Substring(0, carta.Length - 1);
-        
         totalDealer += CalcularValorCarta(valorCarta, totalDealer);
 
-        // Mostrar Carta en Baraja
+        // Mostrar Carta en Baraja (Solo para Debug)
         // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-        // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
+        Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
 
         // Mostrar estado actual del Dealer
         Thread.Sleep(750);
@@ -101,12 +101,13 @@ if (totalJugador != 21 && totalJugador < 21) {
 Console.WriteLine(CrearMensajeFinal(totalDealer, totalJugador));
 Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.\n");
 volverAJugar = Console.ReadLine();
+
 while (true) {
     switch (volverAJugar) {
         case "s":
         case "S":
             goto juegoInicia;
-        case "N":
+        case "N": 
         case "n":
             goto juegoTermina;
         default:
@@ -155,4 +156,16 @@ string CrearMensajeFinal(int totalDealer, int totalJugador) {
     } else {
         return "Ganaste";
     }
+}
+
+void RevisarBaraja () {
+    if (Baraja.Length == 0) {
+        Baraja = new string[] {
+            "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
+            "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
+            "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
+            "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
+        };
+    }
+    return;
 }

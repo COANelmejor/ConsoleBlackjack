@@ -9,8 +9,8 @@ int     totalJugador,
 var     pedirCarta = String.Empty;
 var     volverAJugar = String.Empty;
 
-string  cartasJugador = String.Empty;
-string  cartasDealer = String.Empty;
+string[] cartasJugador = { };
+string[] cartasDealer = { };
 
 string[] Baraja = {
             "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
@@ -19,43 +19,52 @@ string[] Baraja = {
             "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
         };
 
+List<string> manoList;
+
 juegoInicia:
 
 // Inicilizando valores del juego
+// Totales a 0
 totalJugador = 0;
 totalDealer = 0;
-cartasJugador = String.Empty;
-cartasDealer = String.Empty;
+// Limpiar arrays de cartas
+cartasJugador = cartasJugador.Where(val => false).ToArray();
+cartasDealer = cartasDealer.Where(val => false).ToArray();
 
 
 // Jugador
 Console.WriteLine("Listo Jugador?");
 while (totalJugador < 21) {
     {
-        Console.WriteLine("¿Desea pedir otra carta? (s/n)");
         RevisarBaraja();
+        Console.WriteLine("¿Pedir carta? (s/n)");
         pedirCarta = Console.ReadLine();
         switch (pedirCarta) {
             case "s":
             case "S":
+                Console.Clear();
                 // Obtener carta
                 cartaATomar = random.Next(0, Baraja.Length);
                 string carta = Baraja[cartaATomar];
-                cartasJugador = $"{cartasJugador} {carta}";
+
+                manoList = cartasJugador.ToList();
+                manoList.Add(carta);
+                cartasJugador = manoList.ToArray();
 
                 // Eliminar carta de la Baraja
                 Baraja = Baraja.Where(val => val != carta).ToArray();
 
                 // Calcualr valor de la carta
-                string valorCarta = carta.Substring(0, carta.Length - 1);
-                totalJugador += CalcularValorCarta(valorCarta, totalJugador);
+                totalJugador = CalcularMano(cartasJugador);
 
                 // Mostrar Carta en Baraja (Solo para Debug)
                 // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
                 // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
 
                 // Mostrar Estado actual del jugador
-                Console.WriteLine($"Total: {totalJugador} | Cartas:{cartasJugador}");
+                Console.WriteLine();
+                Console.WriteLine($"Total: {totalJugador} | Cartas: {string.Join(" ", cartasJugador)}");
+                Console.WriteLine();
                 break;
             case "n":
             case "N":
@@ -69,20 +78,22 @@ while (totalJugador < 21) {
 jugadorTermina:
 
 // Dealer
-if (totalJugador != 21 && totalJugador < 21) {
+if (totalJugador < 22) {
     Console.WriteLine("Dealer Juega");
     while (totalDealer < 21) {
         RevisarBaraja();
         cartaATomar = random.Next(0, Baraja.Length);
         string carta = Baraja[cartaATomar];
-        cartasDealer = $"{cartasDealer} {carta}";
+
+        manoList = cartasDealer.ToList();
+        manoList.Add(carta);
+        cartasDealer = manoList.ToArray();
 
         // Eliminar carta de la Baraja
         Baraja = Baraja.Where(val => val != carta).ToArray();
 
         // Calcular valor de la carta
-        string valorCarta = carta.Substring(0, carta.Length - 1);
-        totalDealer += CalcularValorCarta(valorCarta, totalDealer);
+        totalDealer = CalcularMano(cartasDealer);
 
         // Mostrar Carta en Baraja (Solo para Debug)
         // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
@@ -90,7 +101,12 @@ if (totalJugador != 21 && totalJugador < 21) {
 
         // Mostrar estado actual del Dealer
         Thread.Sleep(750);
-        Console.WriteLine($"Total: {totalDealer} | Cartas:{cartasDealer}");
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine(
+            $"Total: {totalJugador} | Cartas: {string.Join(" ", cartasJugador)}\n\n" +
+            $"Dealer Juega\n\n" +
+            $"Total: {totalDealer} | Cartas: {string.Join(" ", cartasDealer)}");
         if (totalDealer >= totalJugador) {
             break;
         }
@@ -98,48 +114,43 @@ if (totalJugador != 21 && totalJugador < 21) {
     }
 }
 
-Console.WriteLine(CrearMensajeFinal(totalDealer, totalJugador));
-Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.\n");
+Console.WriteLine($"\n{CrearMensajeFinal(totalDealer, totalJugador)}");
+Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.");
 volverAJugar = Console.ReadLine();
 
 while (true) {
     switch (volverAJugar) {
         case "s":
         case "S":
+            Console.Clear();
             goto juegoInicia;
         case "N": 
         case "n":
             goto juegoTermina;
         default:
             Console.WriteLine("Porfavor usa solo 's' o 'n'");
+            volverAJugar = Console.ReadLine();
             break;
     }
 }
 
 juegoTermina:
-Console.WriteLine("Pulsa cualquier tecla para salir... :D.");
+Console.WriteLine("Pulsa cualquier [Enter] para salir... :D.");
 Console.ReadLine();
 
-int CalcularValorCarta(string carta, int total) {
-    int valor = 0;
-    switch (carta) {
+int CalcularValorCarta(string carta) {
+    // Obtener primer caracter de carta
+    string valorCarta = carta.Substring(0, carta.Length - 1);
+    switch (valorCarta) {
         case "A":
-            if (total + 11 > 21) {
-                valor = 1;
-            } else {
-                valor = 11;
-            }
-            break;
+            return 1;
         case "J":
         case "Q":
         case "K":
-            valor = 10;
-            break;
+            return 10;
         default:
-            valor = int.Parse(carta);
-            break;
+            return int.Parse(valorCarta);
     }
-    return valor;
 }
 
 string CrearMensajeFinal(int totalDealer, int totalJugador) {
@@ -168,4 +179,27 @@ void RevisarBaraja () {
         };
     }
     return;
+}
+
+int CalcularMano (string[] mano) {
+    int totalMano = 0;
+    int asEnMano = 0;
+    for (int i = 0; i < mano.Length; i++) {
+        int valorCarta = CalcularValorCarta(mano[i]);
+        if (valorCarta != 1) {
+            totalMano += valorCarta;
+        } else {
+            asEnMano++;
+        }
+    }
+
+    for (int a = 0; a < asEnMano; a++) {
+        if (totalMano + 11 > 21) { 
+            totalMano += 1;
+        } else {
+            totalMano += 11;
+        }
+    }
+
+    return totalMano;
 }

@@ -1,7 +1,4 @@
-﻿Random random = new Random();
-// See https://aka.ms/new-console-template for more information
-// Console.WriteLine("Hello, World!");
-
+﻿// Declaración de variables, arrys y listas
 int totalJugador,
         totalDealer,
         cartaATomar,
@@ -25,8 +22,10 @@ string[] Baraja = {
 
 List<string> manoList;
 
-juegoInicia:
+// Declaracion de métodos globales
+Random random = new();
 
+juegoInicia:
 // Inicilizando valores del juego
 // Totales a 0
 totalJugador = 0;
@@ -81,7 +80,6 @@ while (totalJugador < 21) {
 }
 
 jugadorTermina:
-
 if (totalJugador == 21 && cartasJugador.Length == 2) {
     goto mensajeFinal;
 }
@@ -116,7 +114,7 @@ if (totalJugador < 22) {
             $"Total: {totalJugador} | Cartas: {string.Join(" ", cartasJugador)}\n\n" +
             $"Dealer Juega\n\n" +
             $"Total: {totalDealer} | Cartas: {string.Join(" ", cartasDealer)}");
-        if (totalDealer >= totalJugador) {
+        if (totalDealer > totalJugador || totalDealer > 16) {
             break;
         }
 
@@ -125,11 +123,7 @@ if (totalJugador < 22) {
 
 mensajeFinal:
 Console.WriteLine($"{CrearMensajeFinal(totalDealer, totalJugador)}\n");
-Console.Write($"Juegos: {juegosJugados} ");
-Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"| Ganados: {juegosGanados} ");
-Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"| Perdidos: {juegosPerdidos} ");
-Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"| Empatados: {juegosEmpatados}\n");
-Console.ResetColor();
+MostrarMarcador();
 Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.");
 volverAJugar = Console.ReadLine();
 
@@ -150,11 +144,21 @@ while (true) {
 }
 
 juegoTermina:
-Console.WriteLine("Pulsa cualquier [Enter] para salir... :D.");
+Console.Clear();
+Console.WriteLine("| Marcador Final");
+MostrarMarcador();
+Console.WriteLine("\nPulsa [Enter] para salir... $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
+void MostrarMarcador () {
+                                                    Console.Write($"| Juegos: {juegosJugados} ");
+    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"| Ganados: {juegosGanados} ");
+    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"| Perdidos: {juegosPerdidos} ");
+    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"| Empatados: {juegosEmpatados} ");
+    Console.ResetColor();                           Console.WriteLine("|");
+}
+
 int CalcularValorCarta(string carta) {
-    // Obtener primer caracter de carta
     string valorCarta = carta.Substring(0, carta.Length - 1);
     switch (valorCarta) {
         case "A":
@@ -173,8 +177,7 @@ string CrearMensajeFinal(int totalDealer, int totalJugador) {
     if (totalJugador == 21 && cartasJugador.Length == 2) {
         juegosGanados++;
         return "Conseguiste 21 con BlackJack. Ganaste!";
-    }
-    else if (totalJugador == 21 && totalDealer != 21) {
+    } else if (totalJugador == 21 && totalDealer != 21) {
         juegosGanados++;
         return "Llegaste a 21, Ganaste!";
     } else if (totalJugador > 21) {
@@ -210,15 +213,18 @@ void RevisarBaraja () {
 int CalcularMano (string[] mano) {
     int totalMano = 0;
     int asEnMano = 0;
+    // Revisar cada carta de la mano
     for (int i = 0; i < mano.Length; i++) {
         int valorCarta = CalcularValorCarta(mano[i]);
         if (valorCarta != 1) {
             totalMano += valorCarta;
         } else {
+            // Excepto los As
             asEnMano++;
         }
     }
 
+    // Revisar cada As
     for (int a = 0; a < asEnMano; a++) {
         if (totalMano + 11 > 21) { 
             totalMano += 1;

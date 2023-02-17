@@ -2,9 +2,13 @@
 // See https://aka.ms/new-console-template for more information
 // Console.WriteLine("Hello, World!");
 
-int     totalJugador,
+int totalJugador,
         totalDealer,
-        cartaATomar;
+        cartaATomar,
+        juegosGanados = 0,
+        juegosPerdidos = 0,
+        juegosEmpatados = 0,
+        juegosJugados = 0;
 
 var     pedirCarta = String.Empty;
 var     volverAJugar = String.Empty;
@@ -13,11 +17,11 @@ string[] cartasJugador = { };
 string[] cartasDealer = { };
 
 string[] Baraja = {
-            "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
-            "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
-            "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
-            "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
-        };
+    "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
+    "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
+    "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
+    "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠",
+};
 
 List<string> manoList;
 
@@ -75,7 +79,12 @@ while (totalJugador < 21) {
         }
     }
 }
+
 jugadorTermina:
+
+if (totalJugador == 21 && cartasJugador.Length == 2) {
+    goto mensajeFinal;
+}
 
 // Dealer
 if (totalJugador < 22) {
@@ -114,7 +123,13 @@ if (totalJugador < 22) {
     }
 }
 
-Console.WriteLine($"\n{CrearMensajeFinal(totalDealer, totalJugador)}");
+mensajeFinal:
+Console.WriteLine($"{CrearMensajeFinal(totalDealer, totalJugador)}\n");
+Console.Write($"Juegos: {juegosJugados} ");
+Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"| Ganados: {juegosGanados} ");
+Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"| Perdidos: {juegosPerdidos} ");
+Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"| Empatados: {juegosEmpatados}\n");
+Console.ResetColor();
 Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.");
 volverAJugar = Console.ReadLine();
 
@@ -154,17 +169,28 @@ int CalcularValorCarta(string carta) {
 }
 
 string CrearMensajeFinal(int totalDealer, int totalJugador) {
-    if (totalJugador == 21) {
-        return "Llegaste a 21, Ganaste BlackJack ";
+    juegosJugados++;
+    if (totalJugador == 21 && cartasJugador.Length == 2) {
+        juegosGanados++;
+        return "Conseguiste 21 con BlackJack. Ganaste!";
+    }
+    else if (totalJugador == 21 && totalDealer != 21) {
+        juegosGanados++;
+        return "Llegaste a 21, Ganaste!";
     } else if (totalJugador > 21) {
+        juegosPerdidos++;
         return "Te has pasado. Perdiste!";
     } else if (totalDealer > 21) {
+        juegosGanados++;
         return "El Dealer se ha pasado. Ganaste!";
     } else if (totalJugador == totalDealer) {
+        juegosEmpatados++;
         return "Ambos han sacado lo mismo. Empate.";
     } else if (totalJugador < 21 && totalDealer > totalJugador) {
+        juegosPerdidos++;
         return "El dealear tiene más que tú. Perdiste";
     } else {
+        juegosGanados++;
         return "Ganaste";
     }
 }

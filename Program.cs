@@ -1,17 +1,17 @@
 ﻿// Declaración de variables, arrys y listas
 int totalJugador,
-        totalDealer,
-        cartaATomar,
-        juegosGanados = 0,
-        juegosPerdidos = 0,
-        juegosEmpatados = 0,
-        juegosJugados = 0;
+    totalDealer,
+    cartaATomar,
+    juegosGanados = 0,
+    juegosPerdidos = 0,
+    juegosEmpatados = 0,
+    juegosJugados = 0;
 
-var     pedirCarta = String.Empty;
-var     volverAJugar = String.Empty;
+var pedirCarta = String.Empty;
+var volverAJugar = String.Empty;
 
-string[] cartasJugador = { };
-string[] cartasDealer = { };
+string[] cartasJugador = Array.Empty<string>();
+string[] cartasDealer = Array.Empty<string>();
 
 string[] Baraja = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",

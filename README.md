@@ -4,10 +4,20 @@
 
 Little game of Blackjack that runs in console.
 
-## The Game Works NOW
+## The Game Works NOW (in spanish)
 
-At this moment you can clone the repo and it will work with some issues that needs to be resolved.
+At this moment you can clone the repo and it will work.
 
-(Issues of Logic, Not in Code)
+`2023-02-19` Now it tracks your won, lost and draw games.
+
+In the near future I'll add a way to bet.
 
 Have Fun!!! :D
+
+## Completed and To Do List
+
+- [x] Base Blackjack with one deck of cards
+- [x] Finish a cards of a deck, then open a new one
+- [x] Track of games
+- [ ] Bet
+- [ ] English translation

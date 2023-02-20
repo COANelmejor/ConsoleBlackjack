@@ -21,3 +21,6 @@ Have Fun!!! :D
 - [x] Track of games
 - [ ] Bet
 - [ ] English translation
+- [ ] ASCII Graphic for the cards
+    - [ ] Little Style
+    - [ ] Big Style

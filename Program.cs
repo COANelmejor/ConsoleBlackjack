@@ -5,10 +5,16 @@ int totalJugador,
     juegosGanados = 0,
     juegosPerdidos = 0,
     juegosEmpatados = 0,
-    juegosJugados = 0;
+    juegosJugados = 0,
+    billetera = 0,
+    billeteraInicial = 0,
+    apuesta = 0;
 
+bool billeteraActiva = false;
+bool apuestaActiva = false;
 var pedirCarta = String.Empty;
 var volverAJugar = String.Empty;
+var stringIngreasadoPorJugador = String.Empty;
 
 string[] cartasJugador = Array.Empty<string>();
 string[] cartasDealer = Array.Empty<string>();
@@ -30,17 +36,65 @@ juegoInicia:
 // Totales a 0
 totalJugador = 0;
 totalDealer = 0;
+apuestaActiva = false;
 // Limpiar arrays de cartas
 cartasJugador = cartasJugador.Where(val => false).ToArray();
 cartasDealer = cartasDealer.Where(val => false).ToArray();
 
-
 // Jugador
-Console.WriteLine("Listo Jugador?");
+if (!billeteraActiva) {
+    Console.WriteLine("Hola Jugador. ¿Listo para Jugar?\n");
+    Console.WriteLine("¿Cuanto dinero traes para apostar?");
+    Console.WriteLine("Debe ser un multiplo de 50. ($50, $100, $750, etc)");
+    
+    while (!billeteraActiva) {
+        Console.Write("$");
+        stringIngreasadoPorJugador = Console.ReadLine();
+        if (!int.TryParse(stringIngreasadoPorJugador, out billetera)) {
+            Console.WriteLine("Ingresa solo un números por favor.");
+            continue;
+        }
+        if (billetera == 0) {
+            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+        } else if (billetera % 50 != 0) { 
+            Console.WriteLine("Debe ser un multiplo de 50. ($50, $100, $750, etc)");
+        } else {
+            billeteraInicial = billetera;
+            billeteraActiva = true;
+        }
+
+    }
+}
+
+Console.Clear();
+while (!apuestaActiva) {
+    Console.WriteLine($"¿Cuanto dinero quieres apostar? Restante: ${billetera}");
+    Console.WriteLine("Debe ser un multiplo de 10. ($10, $20, $150, etc)");
+    while (!apuestaActiva) {
+        Console.Write("$");
+        stringIngreasadoPorJugador = Console.ReadLine();
+        if (!int.TryParse(stringIngreasadoPorJugador, out apuesta)) {
+            Console.WriteLine("Ingresa solo un números por favor.");
+            continue;
+        }
+        if (apuesta == 0) {
+            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+        } else if (apuesta % 10 != 0) {
+            Console.WriteLine("Debe ser un multiplo de 10. ($10, $20, $150, etc.)");
+        } else if (apuesta > billetera) {
+            Console.WriteLine("No puedes apostar más de lo que tienes.");
+        } else {
+            billetera -= apuesta;
+            apuestaActiva = true;
+        }
+    }
+}
+
+Console.Clear();
 while (totalJugador < 21) {
     {
         RevisarBaraja();
-        Console.WriteLine("¿Pedir carta? (s/n)");
+        Console.WriteLine("¿Pedir carta? [s|n]");
         pedirCarta = Console.ReadLine();
         switch (pedirCarta) {
             case "s":
@@ -73,7 +127,7 @@ while (totalJugador < 21) {
             case "N":
                 goto jugadorTermina;
             default:
-                Console.WriteLine("Parfavor solo usa 's' o 'n'.");
+                Console.WriteLine("Por favor solo usa [s|n]'.");
                 break;
         }
     }
@@ -124,8 +178,14 @@ if (totalJugador < 22) {
 mensajeFinal:
 Console.WriteLine($"{CrearMensajeFinal(totalDealer, totalJugador)}\n");
 MostrarMarcador();
-Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? s/n.");
-volverAJugar = Console.ReadLine();
+if (billetera > 9) {
+    Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? [s|n].");
+    volverAJugar = Console.ReadLine();
+} else {
+    Console.WriteLine("\nFin del Juego. Pulsa [Enter] Para continuar.");
+    Console.ReadLine();
+    goto juegoTermina;
+}
 
 while (true) {
     switch (volverAJugar) {
@@ -137,7 +197,7 @@ while (true) {
         case "n":
             goto juegoTermina;
         default:
-            Console.WriteLine("Porfavor usa solo 's' o 'n'");
+            Console.WriteLine("Porfavor usa solo [s|n]");
             volverAJugar = Console.ReadLine();
             break;
     }
@@ -145,17 +205,44 @@ while (true) {
 
 juegoTermina:
 Console.Clear();
-Console.WriteLine("| Marcador Final");
+Console.WriteLine("┌──────────");
+Console.WriteLine("│ Marcador Final");
+MensajeBilletera();
 MostrarMarcador();
+Console.WriteLine("└──────────");
+if (billetera < billeteraInicial) {
+    Console.WriteLine("\nBuena Suerte para la próxima");
+}
 Console.WriteLine("\nPulsa [Enter] para salir... $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
 void MostrarMarcador () {
-                                                    Console.Write($"| Juegos: {juegosJugados} ");
-    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"| Ganados: {juegosGanados} ");
-    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"| Perdidos: {juegosPerdidos} ");
-    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"| Empatados: {juegosEmpatados} ");
+                                                    Console.Write($"│ Juegos: {juegosJugados} ");
+    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ Ganados: {juegosGanados} ");
+    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ Perdidos: {juegosPerdidos} ");
+    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ Empatados: {juegosEmpatados} ");
     Console.ResetColor();                           Console.WriteLine("|");
+}
+
+void MensajeBilletera () { 
+    if (billetera < billeteraInicial) {
+        Console.Write("│ ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Tu billetera: ${billetera}.");
+        Console.ResetColor();
+        Console.Write("│ ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Has perdido ${billeteraInicial - billetera}");
+    } else {
+        Console.Write("│ ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Tu billetera: ${billetera}.");
+        Console.ResetColor();
+        Console.Write("│ ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Has ganado ${billetera - billeteraInicial}");
+    }
+    Console.ResetColor();
 }
 
 int CalcularValorCarta(string carta) {
@@ -175,26 +262,31 @@ int CalcularValorCarta(string carta) {
 string CrearMensajeFinal(int totalDealer, int totalJugador) {
     juegosJugados++;
     if (totalJugador == 21 && cartasJugador.Length == 2) {
+        billetera += Convert.ToInt32(apuesta * 3);
         juegosGanados++;
-        return "Conseguiste 21 con BlackJack. Ganaste!";
+        return $"Conseguiste 21 con BlackJack. Ganaste ${Convert.ToInt32(apuesta * 3)}!";
     } else if (totalJugador == 21 && totalDealer != 21) {
+        billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return "Llegaste a 21, Ganaste!";
+        return $"Llegaste a 21, Ganaste ${Convert.ToInt32(apuesta * 2)}!";
     } else if (totalJugador > 21) {
         juegosPerdidos++;
-        return "Te has pasado. Perdiste!";
+        return $"Te has pasado. Perdiste ${apuesta}!";
     } else if (totalDealer > 21) {
+        billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return "El Dealer se ha pasado. Ganaste!";
+        return $"El Dealer se ha pasado. Ganaste ${Convert.ToInt32(apuesta * 2)}!";
     } else if (totalJugador == totalDealer) {
+        billetera += apuesta;
         juegosEmpatados++;
-        return "Ambos han sacado lo mismo. Empate.";
+        return $"Ambos han sacado lo mismo. Empate.";
     } else if (totalJugador < 21 && totalDealer > totalJugador) {
         juegosPerdidos++;
-        return "El dealear tiene más que tú. Perdiste";
+        return $"El dealear tiene más que tú. Perdiste ${apuesta}";
     } else {
+        billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return "Ganaste";
+        return $"Tienes más que el dealer. Ganaste ${Convert.ToInt32(apuesta * 2)}";
     }
 }
 

@@ -5,10 +5,15 @@ int totalJugador,
     juegosGanados = 0,
     juegosPerdidos = 0,
     juegosEmpatados = 0,
-    juegosJugados = 0;
+    juegosJugados = 0,
+    billetera = 0,
+    apuesta = 0;
 
+bool billeteraActiva = false;
+bool apuestaActiva = false;
 var pedirCarta = String.Empty;
 var volverAJugar = String.Empty;
+var stringIngreasadoPorJugador = String.Empty;
 
 string[] cartasJugador = Array.Empty<string>();
 string[] cartasDealer = Array.Empty<string>();
@@ -30,13 +35,59 @@ juegoInicia:
 // Totales a 0
 totalJugador = 0;
 totalDealer = 0;
+apuestaActiva = false;
 // Limpiar arrays de cartas
 cartasJugador = cartasJugador.Where(val => false).ToArray();
 cartasDealer = cartasDealer.Where(val => false).ToArray();
 
-
 // Jugador
-Console.WriteLine("Listo Jugador?");
+if (!billeteraActiva) {
+    Console.WriteLine("Hola Jugador. ¿Listo para Jugar?");
+    Console.WriteLine("¿Cuanto dinero traes para ingresar?");
+    Console.WriteLine("Debe ser un multiplo de 50. ($50, $100, 750, etc)");
+    
+    while (!billeteraActiva) {
+        Console.Write("$");
+        stringIngreasadoPorJugador = Console.ReadLine();
+        if (!int.TryParse(stringIngreasadoPorJugador, out billetera)) {
+            Console.WriteLine("Ingresa solo un números por favor.");
+            continue;
+        }
+        if (billetera == 0) {
+            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+        } else if (billetera % 50 != 0) { 
+            Console.WriteLine("Debe ser un multiplo de $50. (50, 100, 750, etc)");
+        } else {
+            billeteraActiva = true;
+        }
+
+    }
+}
+
+while (!apuestaActiva) {
+    Console.WriteLine("¿Cuanto dinero quieres apostar?");
+    Console.WriteLine("Debe ser un multiplo de 5. ($50, $100, 750, etc)");
+    while (!apuestaActiva) {
+        Console.Write("$");
+        stringIngreasadoPorJugador = Console.ReadLine();
+        if (!int.TryParse(stringIngreasadoPorJugador, out apuesta)) {
+            Console.WriteLine("Ingresa solo un números por favor.");
+            continue;
+        }
+        if (apuesta == 0) {
+            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+        } else if (apuesta % 5 != 0) {
+            Console.WriteLine("Debe ser un multiplo de $5. (5, 10, 75, etc.)");
+        } else if (apuesta > billetera) {
+            Console.WriteLine("No puedes apostar más de lo que tienes.");
+        } else {
+            billetera -= apuesta;
+            apuestaActiva = true;
+        }
+    }
+}
+
+
 while (totalJugador < 21) {
     {
         RevisarBaraja();

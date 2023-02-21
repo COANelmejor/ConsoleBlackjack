@@ -1,4 +1,6 @@
 ﻿// Declaración de variables, arrys y listas
+using ConsoleBlackjack;
+
 int totalJugador,
     totalDealer,
     cartaATomar,
@@ -18,6 +20,9 @@ var stringIngreasadoPorJugador = String.Empty;
 
 string[] cartasJugador = Array.Empty<string>();
 string[] cartasDealer = Array.Empty<string>();
+
+Console.WriteLine($"{LangEN.hello} {LangEN.world}");
+Console.WriteLine($"{LangES.hello} {LangES.world}");
 
 string[] Baraja = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",

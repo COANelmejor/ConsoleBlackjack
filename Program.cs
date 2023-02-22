@@ -1,5 +1,4 @@
-﻿// Declaración de variables, arrys y listas
-using ConsoleBlackjack;
+﻿using ConsoleBlackjack;
 using System.Globalization;
 
 int totalJugador,

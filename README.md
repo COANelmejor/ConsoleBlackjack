@@ -19,8 +19,8 @@ Have Fun!!! :D
 - [x] Base Blackjack with one deck of cards
 - [x] Finish a cards of a deck, then open a new one
 - [x] Track of games
-- [ ] Bet
-- [ ] English translation
+- [x] Bet
+- [x] English translation
 - [ ] ASCII Graphic for the cards
     - [ ] Little Style
     - [ ] Big Style

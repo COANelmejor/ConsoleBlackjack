@@ -8,26 +8,35 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="LangEN.Designer.cs">
+    <Compile Update="lang.en.Designer.cs">
+      <DependentUpon>lang.en.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LangEN.resx</DependentUpon>
     </Compile>
-    <Compile Update="LangES.Designer.cs">
+    <Compile Update="lang.es.Designer.cs">
+      <DependentUpon>lang.es.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LangES.resx</DependentUpon>
+    </Compile>
+    <Compile Update="lang.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>lang.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="LangEN.resx">
+    <EmbeddedResource Update="lang.en.resx">
+      <LastGenOutput>lang.en.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LangEN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="LangES.resx">
+    <EmbeddedResource Update="lang.es.resx">
+      <LastGenOutput>lang.es.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LangES.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="lang.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

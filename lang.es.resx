@@ -117,10 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="hello" xml:space="preserve">
-    <value>Hola</value>
+  <data name="errorFiftyMultiplier" xml:space="preserve">
+    <value>Debe ser un multiplo de 50. ($50, $100, $750, etc)</value>
   </data>
-  <data name="world" xml:space="preserve">
-    <value>Mundo</value>
+  <data name="errorNumberZero" xml:space="preserve">
+    <value>Ingresa un valor mayor a 0 por favor</value>
+  </data>
+  <data name="errorOnlyNumbers" xml:space="preserve">
+    <value>Ingresa solo números por favor.</value>
+  </data>
+  <data name="errorTenMultiplier" xml:space="preserve">
+    <value>Debe ser un multiplo de 10. ($10, $20, $150, etc.)</value>
+  </data>
+  <data name="errorTryToBetMore" xml:space="preserve">
+    <value>No puedes apostar más de lo que tienes en tu cartera.</value>
+  </data>
+  <data name="errorUseYOrN" xml:space="preserve">
+    <value>Por favor solo usa [s|n]</value>
+  </data>
+  <data name="infoDealerLostWithOverTwentyOne" xml:space="preserve">
+    <value>El Dealer se ha pasado de 21. Ganaste</value>
+  </data>
+  <data name="infoDealerPlays" xml:space="preserve">
+    <value>Dealer Juega</value>
+  </data>
+  <data name="infoDealerWonWithOverPlayer" xml:space="preserve">
+    <value>El dealear tiene más que tú. Perdiste</value>
+  </data>
+  <data name="infoExit" xml:space="preserve">
+    <value>Pulsa [Enter] para salir...</value>
+  </data>
+  <data name="infoFinalScore" xml:space="preserve">
+    <value>Marcador Final</value>
+  </data>
+  <data name="infoGames" xml:space="preserve">
+    <value>Juegos</value>
+  </data>
+  <data name="infoGameTie" xml:space="preserve">
+    <value>Ambos tienen la misma puntuación. Empate</value>
+  </data>
+  <data name="infoGoodLuck" xml:space="preserve">
+    <value>Buena suerte para la próxima</value>
+  </data>
+  <data name="infoHand" xml:space="preserve">
+    <value>Mano</value>
+  </data>
+  <data name="infoHardGameOver" xml:space="preserve">
+    <value>Fin del Juego. Pulsa [Enter] Para continuar.</value>
+  </data>
+  <data name="infoLost" xml:space="preserve">
+    <value>Perdidos</value>
+  </data>
+  <data name="infoPlayerHand" xml:space="preserve">
+    <value>Mano del Jugador</value>
+  </data>
+  <data name="infoPlayerLostWithOverTwentyOne" xml:space="preserve">
+    <value>Te has pasado de 21. Perdiste</value>
+  </data>
+  <data name="infoPlayerWonWithBlackjack" xml:space="preserve">
+    <value>Conseguiste 21 con BlackJack. Ganaste</value>
+  </data>
+  <data name="infoPlayerWonWithOverDealer" xml:space="preserve">
+    <value>Tienes más que el dealer. Ganaste</value>
+  </data>
+  <data name="infoPlayerWonWithTwentyOne" xml:space="preserve">
+    <value>Llegaste a 21. Ganaste</value>
+  </data>
+  <data name="infoSoftGameOver" xml:space="preserve">
+    <value>Fin del Juego. ¿Volver a Jugar? [s|n]</value>
+  </data>
+  <data name="infoTied" xml:space="preserve">
+    <value>Empatados</value>
+  </data>
+  <data name="infoTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="infoWalletMultiplier" xml:space="preserve">
+    <value>Debe ser un multiplo de 50. ($50, $100, $750, etc)</value>
+  </data>
+  <data name="infoWon" xml:space="preserve">
+    <value>Ganados</value>
+  </data>
+  <data name="infoYouLost" xml:space="preserve">
+    <value>Has perdido</value>
+  </data>
+  <data name="infoYourWallet" xml:space="preserve">
+    <value>Tu billetera</value>
+  </data>
+  <data name="infoYouWon" xml:space="preserve">
+    <value>Has ganado</value>
+  </data>
+  <data name="languageSelection" xml:space="preserve">
+    <value>Selección de idioma</value>
+  </data>
+  <data name="languageSelectionSelect" xml:space="preserve">
+    <value>Selecciona: </value>
+  </data>
+  <data name="playerBetInfoTenMultiplier" xml:space="preserve">
+    <value>Debe ser un multiplo de 10. ($10, $20, $150, etc)</value>
+  </data>
+  <data name="playerBetInfoWalletRemain" xml:space="preserve">
+    <value>¿Cuanto dinero quieres apostar? Restante:</value>
+  </data>
+  <data name="playerCardAsk" xml:space="preserve">
+    <value>¿Pedir carta? [s|n]</value>
+  </data>
+  <data name="playerWalletAsk" xml:space="preserve">
+    <value>¿Cuanto dinero traes para apostar?</value>
+  </data>
+  <data name="playerWelcome" xml:space="preserve">
+    <value>Hola Jugador. ¿Listo para Jugar?</value>
   </data>
 </root>

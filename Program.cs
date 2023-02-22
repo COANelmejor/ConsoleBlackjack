@@ -1,5 +1,6 @@
 ﻿// Declaración de variables, arrys y listas
 using ConsoleBlackjack;
+using System.Globalization;
 
 int totalJugador,
     totalDealer,
@@ -21,9 +22,6 @@ var stringIngreasadoPorJugador = String.Empty;
 string[] cartasJugador = Array.Empty<string>();
 string[] cartasDealer = Array.Empty<string>();
 
-Console.WriteLine($"{LangEN.hello} {LangEN.world}");
-Console.WriteLine($"{LangES.hello} {LangES.world}");
-
 string[] Baraja = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
     "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
@@ -32,6 +30,34 @@ string[] Baraja = {
 };
 
 List<string> manoList;
+
+// Selección de Idioma
+Console.WriteLine(lang.languageSelection);
+Console.WriteLine("1. English (Default)");
+Console.WriteLine("2. Español");
+Console.Write(lang.languageSelectionSelect);
+stringIngreasadoPorJugador = Console.ReadLine();
+
+switch (stringIngreasadoPorJugador) {
+    case "1":
+    case "en":
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+        break;  
+    case "2":
+    case "es":
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("es");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("es");
+        break;  
+    default:  
+        Console.WriteLine("Invalid selection. English selected by default.");
+        Console.WriteLine("Press [Enter] to continue.");
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+        Console.ReadLine();
+        break;
+}
+Console.Clear();
 
 // Declaracion de métodos globales
 Random random = new();
@@ -48,21 +74,21 @@ cartasDealer = cartasDealer.Where(val => false).ToArray();
 
 // Jugador
 if (!billeteraActiva) {
-    Console.WriteLine("Hola Jugador. ¿Listo para Jugar?\n");
-    Console.WriteLine("¿Cuanto dinero traes para apostar?");
-    Console.WriteLine("Debe ser un multiplo de 50. ($50, $100, $750, etc)");
+    Console.WriteLine($"{lang.playerWelcome}\n");
+    Console.WriteLine(lang.playerWalletAsk);
+    Console.WriteLine(lang.infoWalletMultiplier);
     
     while (!billeteraActiva) {
         Console.Write("$");
         stringIngreasadoPorJugador = Console.ReadLine();
         if (!int.TryParse(stringIngreasadoPorJugador, out billetera)) {
-            Console.WriteLine("Ingresa solo un números por favor.");
+            Console.WriteLine(lang.errorOnlyNumbers);
             continue;
         }
         if (billetera == 0) {
-            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+            Console.WriteLine(lang.errorNumberZero);
         } else if (billetera % 50 != 0) { 
-            Console.WriteLine("Debe ser un multiplo de 50. ($50, $100, $750, etc)");
+            Console.WriteLine(lang.errorFiftyMultiplier);
         } else {
             billeteraInicial = billetera;
             billeteraActiva = true;
@@ -73,21 +99,21 @@ if (!billeteraActiva) {
 
 Console.Clear();
 while (!apuestaActiva) {
-    Console.WriteLine($"¿Cuanto dinero quieres apostar? Restante: ${billetera}");
-    Console.WriteLine("Debe ser un multiplo de 10. ($10, $20, $150, etc)");
+    Console.WriteLine($"{lang.playerBetInfoWalletRemain} ${billetera}");
+    Console.WriteLine(lang.playerBetInfoTenMultiplier);
     while (!apuestaActiva) {
         Console.Write("$");
         stringIngreasadoPorJugador = Console.ReadLine();
         if (!int.TryParse(stringIngreasadoPorJugador, out apuesta)) {
-            Console.WriteLine("Ingresa solo un números por favor.");
+            Console.WriteLine(lang.errorOnlyNumbers);
             continue;
         }
         if (apuesta == 0) {
-            Console.WriteLine("Ingresa un valor mayor a 0 por favor");
+            Console.WriteLine(lang.errorNumberZero);
         } else if (apuesta % 10 != 0) {
-            Console.WriteLine("Debe ser un multiplo de 10. ($10, $20, $150, etc.)");
+            Console.WriteLine(lang.errorTenMultiplier);
         } else if (apuesta > billetera) {
-            Console.WriteLine("No puedes apostar más de lo que tienes.");
+            Console.WriteLine(lang.errorTryToBetMore);
         } else {
             billetera -= apuesta;
             apuestaActiva = true;
@@ -99,11 +125,13 @@ Console.Clear();
 while (totalJugador < 21) {
     {
         RevisarBaraja();
-        Console.WriteLine("¿Pedir carta? [s|n]");
+        Console.WriteLine(lang.playerCardAsk);
         pedirCarta = Console.ReadLine();
         switch (pedirCarta) {
             case "s":
             case "S":
+            case "y":
+            case "Y":
                 Console.Clear();
                 // Obtener carta
                 cartaATomar = random.Next(0, Baraja.Length);
@@ -125,14 +153,14 @@ while (totalJugador < 21) {
 
                 // Mostrar Estado actual del jugador
                 Console.WriteLine();
-                Console.WriteLine($"Total: {totalJugador} | Cartas: {string.Join(" ", cartasJugador)}");
+                Console.WriteLine($"{lang.infoTotal}: {totalJugador} | {lang.infoHand}: {string.Join(" ", cartasJugador)}");
                 Console.WriteLine();
                 break;
             case "n":
             case "N":
                 goto jugadorTermina;
             default:
-                Console.WriteLine("Por favor solo usa [s|n]'.");
+                Console.WriteLine(lang.errorUseYOrN);
                 break;
         }
     }
@@ -145,7 +173,7 @@ if (totalJugador == 21 && cartasJugador.Length == 2) {
 
 // Dealer
 if (totalJugador < 22) {
-    Console.WriteLine("Dealer Juega");
+    Console.WriteLine(lang.infoDealerPlays);
     while (totalDealer < 21) {
         RevisarBaraja();
         cartaATomar = random.Next(0, Baraja.Length);
@@ -170,9 +198,10 @@ if (totalJugador < 22) {
         Console.Clear();
         Console.WriteLine();
         Console.WriteLine(
-            $"Total: {totalJugador} | Cartas: {string.Join(" ", cartasJugador)}\n\n" +
-            $"Dealer Juega\n\n" +
-            $"Total: {totalDealer} | Cartas: {string.Join(" ", cartasDealer)}");
+            $"{lang.infoPlayerHand}\n" +
+            $"{lang.infoTotal}: {totalJugador} | {lang.infoHand}: {string.Join(" ", cartasJugador)}\n\n" +
+            $"{lang.infoDealerPlays}\n\n" +
+            $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cartasDealer)}");
         if (totalDealer > totalJugador || totalDealer > 16) {
             break;
         }
@@ -184,10 +213,10 @@ mensajeFinal:
 Console.WriteLine($"{CrearMensajeFinal(totalDealer, totalJugador)}\n");
 MostrarMarcador();
 if (billetera > 9) {
-    Console.WriteLine("\nFin del Juego. ¿Volver a Jugar? [s|n].");
+    Console.WriteLine($"\n{lang.infoSoftGameOver}");
     volverAJugar = Console.ReadLine();
 } else {
-    Console.WriteLine("\nFin del Juego. Pulsa [Enter] Para continuar.");
+    Console.WriteLine($"\n{lang.infoHardGameOver}");
     Console.ReadLine();
     goto juegoTermina;
 }
@@ -196,13 +225,15 @@ while (true) {
     switch (volverAJugar) {
         case "s":
         case "S":
+        case "y":
+        case "Y":
             Console.Clear();
             goto juegoInicia;
         case "N": 
         case "n":
             goto juegoTermina;
         default:
-            Console.WriteLine("Porfavor usa solo [s|n]");
+            Console.WriteLine(lang.errorUseYOrN);
             volverAJugar = Console.ReadLine();
             break;
     }
@@ -210,22 +241,22 @@ while (true) {
 
 juegoTermina:
 Console.Clear();
-Console.WriteLine("┌──────────");
-Console.WriteLine("│ Marcador Final");
+Console.WriteLine( "┌────────────────────");
+Console.WriteLine($"│ {lang.infoFinalScore}");
 MensajeBilletera();
 MostrarMarcador();
-Console.WriteLine("└──────────");
+Console.WriteLine( "└────────────────────");
 if (billetera < billeteraInicial) {
-    Console.WriteLine("\nBuena Suerte para la próxima");
+    Console.WriteLine($"\n{lang.infoGoodLuck}");
 }
-Console.WriteLine("\nPulsa [Enter] para salir... $_$"); //👍🏽🖐🏼🃏
+Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
 void MostrarMarcador () {
-                                                    Console.Write($"│ Juegos: {juegosJugados} ");
-    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ Ganados: {juegosGanados} ");
-    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ Perdidos: {juegosPerdidos} ");
-    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ Empatados: {juegosEmpatados} ");
+                                                    Console.Write($"│ {lang.infoGames}: {juegosJugados} ");
+    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {juegosGanados} ");
+    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ {lang.infoLost}: {juegosPerdidos} ");
+    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ {lang.infoTied}: {juegosEmpatados} ");
     Console.ResetColor();                           Console.WriteLine("|");
 }
 
@@ -233,19 +264,19 @@ void MensajeBilletera () {
     if (billetera < billeteraInicial) {
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Tu billetera: ${billetera}.");
+        Console.WriteLine($"{lang.infoYourWallet}: ${billetera}.");
         Console.ResetColor();
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Has perdido ${billeteraInicial - billetera}");
+        Console.WriteLine($"{lang.infoYouLost} ${billeteraInicial - billetera}");
     } else {
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"Tu billetera: ${billetera}.");
+        Console.WriteLine($"{lang.infoYourWallet}: ${billetera}.");
         Console.ResetColor();
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"Has ganado ${billetera - billeteraInicial}");
+        Console.WriteLine($"{lang.infoYouWon} ${billetera - billeteraInicial}");
     }
     Console.ResetColor();
 }
@@ -269,29 +300,29 @@ string CrearMensajeFinal(int totalDealer, int totalJugador) {
     if (totalJugador == 21 && cartasJugador.Length == 2) {
         billetera += Convert.ToInt32(apuesta * 3);
         juegosGanados++;
-        return $"Conseguiste 21 con BlackJack. Ganaste ${Convert.ToInt32(apuesta * 3)}!";
+        return $"{lang.infoPlayerWonWithBlackjack} ${Convert.ToInt32(apuesta * 3)}!";
     } else if (totalJugador == 21 && totalDealer != 21) {
         billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return $"Llegaste a 21, Ganaste ${Convert.ToInt32(apuesta * 2)}!";
+        return $"{lang.infoPlayerWonWithTwentyOne} ${Convert.ToInt32(apuesta * 2)}!";
     } else if (totalJugador > 21) {
         juegosPerdidos++;
-        return $"Te has pasado. Perdiste ${apuesta}!";
+        return $"{lang.infoPlayerLostWithOverTwentyOne} ${apuesta}!";
     } else if (totalDealer > 21) {
         billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return $"El Dealer se ha pasado. Ganaste ${Convert.ToInt32(apuesta * 2)}!";
+        return $"{lang.infoDealerLostWithOverTwentyOne} ${Convert.ToInt32(apuesta * 2)}!";
     } else if (totalJugador == totalDealer) {
         billetera += apuesta;
         juegosEmpatados++;
-        return $"Ambos han sacado lo mismo. Empate.";
+        return $"{lang.infoGameTie}";
     } else if (totalJugador < 21 && totalDealer > totalJugador) {
         juegosPerdidos++;
-        return $"El dealear tiene más que tú. Perdiste ${apuesta}";
+        return $"{lang.infoDealerWonWithOverPlayer} ${apuesta}";
     } else {
         billetera += Convert.ToInt32(apuesta * 2);
         juegosGanados++;
-        return $"Tienes más que el dealer. Ganaste ${Convert.ToInt32(apuesta * 2)}";
+        return $"{lang.infoPlayerWonWithOverDealer} ${Convert.ToInt32(apuesta * 2)}";
     }
 }
 

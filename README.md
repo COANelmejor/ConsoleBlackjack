@@ -33,7 +33,7 @@ Have Fun!!! :D
 
 <img src="./img/ConsoleBlackjackIconBorder.ico">
 
-Icon created with the work of:
+Icon created derived from the work of:
 
-- <a href="https://www.flaticon.com/free-icons/blackjack" title="blackjack icons">Blackjack icons created by Darius Dan - Flaticon</a>
-- <a href="https://www.flaticon.com/free-icons/terminal" title="terminal icons">Terminal icons created by Bharat Icons - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icon/blackjack_1983632" title="blackjack icon" target="_blank">Blackjack icon created by Darius Dan - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icon/terminals_6996035" title="terminal icon">Terminal icon created by Bharat Icons - Flaticon</a>

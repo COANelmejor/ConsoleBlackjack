@@ -26,3 +26,14 @@ Have Fun!!! :D
 - [ ] ASCII Graphic for the cards
     - [ ] Little Style
     - [ ] Big Style
+
+## Atributions
+
+### Game Icon
+
+<img src="./img/ConsoleBlackjackIconBorder.ico">
+
+Icon created with the work of:
+
+- <a href="https://www.flaticon.com/free-icons/blackjack" title="blackjack icons">Blackjack icons created by Darius Dan - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/terminal" title="terminal icons">Terminal icons created by Bharat Icons - Flaticon</a>

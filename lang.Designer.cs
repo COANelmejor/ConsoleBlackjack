@@ -124,7 +124,7 @@ namespace ConsoleBlackjack {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Dealer plays.
+        ///   Busca una cadena traducida similar a Dealer&apos;s Turn.
         /// </summary>
         public static string infoDealerPlays {
             get {

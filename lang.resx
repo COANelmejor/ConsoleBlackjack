@@ -139,7 +139,7 @@
     <value>The Dealer has gone over 21. You won</value>
   </data>
   <data name="infoDealerPlays" xml:space="preserve">
-    <value>Dealer plays</value>
+    <value>Dealer's Turn</value>
   </data>
   <data name="infoDealerWonWithOverPlayer" xml:space="preserve">
     <value>The dealer has more than you. You lost</value>

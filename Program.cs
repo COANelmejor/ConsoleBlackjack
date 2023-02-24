@@ -1,37 +1,37 @@
 ﻿using ConsoleBlackjack;
 using System.Globalization;
 
-int totalPlayer,
-    totalDealer,
-    cardToTake,
-    gamesWon = 0,
-    gamesLost = 0,
-    gamesTie = 0,
-    gamesPlayed = 0,
-    wallet = 0,
-    walletInitialAmount = 0,
-    betAmount = 0;
+int totalPlayer, // points of the player
+    totalDealer, // points of the dealer
+    cardToTake,     // card to take from the deck
+    gamesWon = 0,       // games won by the player
+    gamesLost = 0,      // games lost by the player
+    gamesTie = 0,       // games tied by the player
+    gamesPlayed = 0,    // games played by the player
+    wallet = 0,                 // wallet of the player
+    walletInitialAmount = 0,    // initial wallet of the player
+    betAmount = 0;              // bet amount of the player
 
-bool isWalletActive = false;
-bool isBetActive = false;
+bool isWalletActive = false;// is the wallet active?
+bool isBetActive = false;   // is the bet active?
 
 var askForCard = String.Empty;
 var playAgain = String.Empty;
 var stringWritedByPlayer = String.Empty;
 
-string[] cardsPlayer = Array.Empty<string>();
-string[] cardsDealer = Array.Empty<string>();
+string[] cardsPlayer = Array.Empty<string>(); // cards of the player in the current game
+string[] cardsDealer = Array.Empty<string>(); // cards of the dealer in the current game
 
 string[] DeckOfCards = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
     "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
     "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
     "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠",
-};
+}; // Deck of cards
 
-List<string> handList;
+List<string> handList; // List of cards of the player or dealer. 
 
-// Selección de Idioma
+// Language Selection
 Console.WriteLine(lang.languageSelection);
 Console.WriteLine("1. English (Default)");
 Console.WriteLine("2. Español");
@@ -59,20 +59,21 @@ switch (stringWritedByPlayer) {
 }
 Console.Clear();
 
-// Declaracion de métodos globales
+// Functions to be used in the game
 Random random = new();
 
+// Every game starts here
 gameStart:
-// Inicilizando valores del juego
-// Totales a 0
+// Initilize game values every time the game starts
+// Totals to zero
 totalPlayer = 0;
 totalDealer = 0;
 isBetActive = false;
-// Limpiar arrays de cartas
+// Clean player and dealer cards
 cardsPlayer = cardsPlayer.Where(val => false).ToArray();
 cardsDealer = cardsDealer.Where(val => false).ToArray();
 
-// Jugador
+// Check if the wallet is active
 if (!isWalletActive) {
     Console.WriteLine($"{lang.playerWelcome}\n");
     Console.WriteLine(lang.playerWalletAsk);
@@ -96,8 +97,10 @@ if (!isWalletActive) {
 
     }
 }
-
+// Clear screan after wallet is active
 Console.Clear();
+
+// Check if the player has money to bet, ask for the bet amount and bet
 while (!isBetActive) {
     Console.WriteLine($"{lang.playerBetInfoWalletRemain} ${wallet}");
     Console.WriteLine(lang.playerBetInfoTenMultiplier);
@@ -120,45 +123,49 @@ while (!isBetActive) {
         }
     }
 }
-
+// Clear screan after bet is active
 Console.Clear();
+
+// Start the game. Player's part
 while (totalPlayer < 21) {
     {
+        // Always check the deck before ask for a card
         CheckDeck();
+
+        // Ask for a card
         Console.WriteLine(lang.playerCardAsk);
         askForCard = Console.ReadLine();
         switch (askForCard) {
+            // Player wants a card
             case "s": // Spanish yes (si)
             case "S": // Spanish Yes (Si)
             case "y":
             case "Y":
                 Console.Clear();
-                // Obtener carta
+                // player gets a card and adds it to the player's hand
                 cardToTake = random.Next(0, DeckOfCards.Length);
-                string carta = DeckOfCards[cardToTake];
+                string card = DeckOfCards[cardToTake];
 
                 handList = cardsPlayer.ToList();
-                handList.Add(carta);
+                handList.Add(card);
                 cardsPlayer = handList.ToArray();
 
-                // Eliminar carta de la Baraja
-                DeckOfCards = DeckOfCards.Where(val => val != carta).ToArray();
+                // Remove card from the deck
+                DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
-                // Calcualr valor de la carta
+                // Calculate total of the player's hand
                 totalPlayer = CalculateHand(cardsPlayer);
 
-                // Mostrar Carta en Baraja (Solo para Debug)
-                // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-                // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
-
-                // Mostrar Estado actual del jugador
+                // Show player's hand
                 Console.WriteLine();
                 Console.WriteLine($"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}");
                 Console.WriteLine();
                 break;
+            // Player doesn't want a card
             case "n":
             case "N":
                 goto playerFinish;
+            // Player doesn't input a valid value
             default:
                 Console.WriteLine(lang.errorUseYOrN);
                 break;
@@ -166,34 +173,44 @@ while (totalPlayer < 21) {
     }
 }
 
+// player finish
 playerFinish:
+
+// First check if the player has a blackjack
 if (totalPlayer == 21 && cardsPlayer.Length == 2) {
-    goto finalMessage;
+    goto gameResult;
 }
 
-// Dealer
+// Dealer's Part
+
+// Check player didn't lose
 if (totalPlayer < 22) {
     Console.WriteLine(lang.infoDealerPlays);
+
+    // Wait a little beat
+    Thread.Sleep(500);
+
+    // check if dealer's hand is less than 21
     while (totalDealer < 21) {
+
+        // Always check the deck before ask for a card
         CheckDeck();
+
+        // Dealer's gets a card and adds it to the dealer's hand
         cardToTake = random.Next(0, DeckOfCards.Length);
-        string carta = DeckOfCards[cardToTake];
+        string card = DeckOfCards[cardToTake];
 
         handList = cardsDealer.ToList();
-        handList.Add(carta);
+        handList.Add(card);
         cardsDealer = handList.ToArray();
 
-        // Eliminar carta de la Baraja
-        DeckOfCards = DeckOfCards.Where(val => val != carta).ToArray();
+        // Remove card from the deck
+        DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
-        // Calcular valor de la carta
+        // Calculate total of the dealer's hand
         totalDealer = CalculateHand(cardsDealer);
 
-        // Mostrar Carta en Baraja (Solo para Debug)
-        // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-        // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
-
-        // Mostrar estado actual del Dealer
+        // Show current status of the game
         Thread.Sleep(750);
         Console.Clear();
         Console.WriteLine();
@@ -202,6 +219,8 @@ if (totalPlayer < 22) {
             $"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}\n\n" +
             $"{lang.infoDealerPlays}\n\n" +
             $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cardsDealer)}");
+       
+        // Dealer stops when gets more than player's hand or more than 16
         if (totalDealer > totalPlayer || totalDealer > 16) {
             break;
         }
@@ -209,18 +228,26 @@ if (totalPlayer < 22) {
     }
 }
 
-finalMessage:
+// Game results
+gameResult:
+
+//Show Scoreboard and some comments
 Console.WriteLine($"{CreateFinalMessage(totalDealer, totalPlayer)}\n");
 ShowScoreboard();
+
+// Verify player's wallet
 if (wallet > 9) {
+    // ask for new game if there $10 or more
     Console.WriteLine($"\n{lang.infoSoftGameOver}");
     playAgain = Console.ReadLine();
 } else {
+    // Continue to game over if the is not enough money.
     Console.WriteLine($"\n{lang.infoHardGameOver}");
     Console.ReadLine();
     goto gameEnds;
 }
 
+// verify if the player wants to play again.
 while (true) {
     switch (playAgain) {
         case "s":
@@ -239,7 +266,10 @@ while (true) {
     }
 }
 
+// Game over part
 gameEnds:
+
+// Show final score.
 Console.Clear();
 Console.WriteLine( "┌────────────────────");
 Console.WriteLine($"│ {lang.infoFinalScore}");
@@ -252,6 +282,7 @@ if (wallet < walletInitialAmount) {
 Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
+// Show the record of games in current session.
 void ShowScoreboard () {
                                                     Console.Write($"│ {lang.infoGames}: {gamesPlayed} ");
     Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {gamesWon} ");
@@ -260,6 +291,7 @@ void ShowScoreboard () {
     Console.ResetColor();                           Console.WriteLine("|");
 }
 
+// Show the final status of players walllet with colors for visual help.
 void WalletEndMessage () { 
     if (wallet < walletInitialAmount) {
         Console.Write("│ ");
@@ -281,6 +313,7 @@ void WalletEndMessage () {
     Console.ResetColor();
 }
 
+// Calculates the value of a single card.
 int CalculateCardValue(string carta) {
     string cardValue = carta.Substring(0, carta.Length - 1);
     switch (cardValue) {
@@ -295,6 +328,7 @@ int CalculateCardValue(string carta) {
     }
 }
 
+// Create the finall message based on dealer and player points and updates record of games.
 string CreateFinalMessage(int totalDealer, int totalPlayer) {
     gamesPlayed++;
     if (totalPlayer == 21 && cardsPlayer.Length == 2) {
@@ -326,6 +360,7 @@ string CreateFinalMessage(int totalDealer, int totalPlayer) {
     }
 }
 
+// check if the current deck has enough cards. If there is not enough cards a new deck is "opened"
 void CheckDeck () {
     if (DeckOfCards.Length == 0) {
         DeckOfCards = new string[] {
@@ -338,21 +373,24 @@ void CheckDeck () {
     return;
 }
 
+// Check the value of hand of cards for both player and dealer
 int CalculateHand (string[] hand) {
     int totalHand = 0;
     int asInHand = 0;
-    // Revisar cada carta de la mano
+    // check every card in the hand.
     for (int i = 0; i < hand.Length; i++) {
         int cardValue = CalculateCardValue(hand[i]);
         if (cardValue != 1) {
             totalHand += cardValue;
         } else {
-            // Excepto los As
+            // except for As. These cards has an special behaviour
             asInHand++;
         }
     }
 
-    // Revisar cada As
+    // Every As in hand is check individually
+    // if the hand passes 21 with a value of 11 the card values 1
+    // otherwise the value of the card is 11
     for (int a = 0; a < asInHand; a++) {
         if (totalHand + 11 > 21) { 
             totalHand += 1;

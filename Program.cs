@@ -59,7 +59,7 @@ switch (stringWritedByPlayer) {
 }
 Console.Clear();
 
-// Functions to be used in the game
+// Import methods to be used in the game
 Random random = new();
 
 // Every game starts here

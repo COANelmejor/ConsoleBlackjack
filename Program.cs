@@ -97,10 +97,10 @@ if (!isWalletActive) {
 
     }
 }
-// Clear screan after wallet is active
+// Clear screen after wallet is active
 Console.Clear();
 
-// Check if the player has money to bet, ask for the bet amount and bet
+// Check if the player has money to bet, ask for the bet amount and then bet
 while (!isBetActive) {
     Console.WriteLine($"{lang.playerBetInfoWalletRemain} ${wallet}");
     Console.WriteLine(lang.playerBetInfoTenMultiplier);
@@ -123,7 +123,7 @@ while (!isBetActive) {
         }
     }
 }
-// Clear screan after bet is active
+// Clear screen after bet is active
 Console.Clear();
 
 // Start the game. Player's part
@@ -228,10 +228,10 @@ if (totalPlayer < 22) {
     }
 }
 
-// Game results
+// Game results part
 gameResult:
 
-//Show Scoreboard and some comments
+// Show Scoreboard and some comments
 Console.WriteLine($"{CreateFinalMessage(totalDealer, totalPlayer)}\n");
 ShowScoreboard();
 
@@ -241,7 +241,7 @@ if (wallet > 9) {
     Console.WriteLine($"\n{lang.infoSoftGameOver}");
     playAgain = Console.ReadLine();
 } else {
-    // Continue to game over if the is not enough money.
+    // Continue to "Game Over" if there is not enough money.
     Console.WriteLine($"\n{lang.infoHardGameOver}");
     Console.ReadLine();
     goto gameEnds;
@@ -266,7 +266,7 @@ while (true) {
     }
 }
 
-// Game over part
+// Game Over part
 gameEnds:
 
 // Show final score.
@@ -328,7 +328,7 @@ int CalculateCardValue(string carta) {
     }
 }
 
-// Create the finall message based on dealer and player points and updates record of games.
+// Create the final message based on dealer and player points and updates record of games.
 string CreateFinalMessage(int totalDealer, int totalPlayer) {
     gamesPlayed++;
     if (totalPlayer == 21 && cardsPlayer.Length == 2) {

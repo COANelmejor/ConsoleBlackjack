@@ -70,8 +70,8 @@ totalPlayer = 0;
 totalDealer = 0;
 isBetActive = false;
 // Clean player and dealer cards
-cardsPlayer = cardsPlayer.Where(val => false).ToArray();
-cardsDealer = cardsDealer.Where(val => false).ToArray();
+cardsPlayer = Array.Empty<string>();
+cardsDealer = Array.Empty<string>();
 
 // Check if the wallet is active
 if (!isWalletActive) {

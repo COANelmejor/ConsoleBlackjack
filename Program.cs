@@ -1,43 +1,44 @@
 ﻿using ConsoleBlackjack;
 using System.Globalization;
 
-int totalJugador,
-    totalDealer,
-    cartaATomar,
-    juegosGanados = 0,
-    juegosPerdidos = 0,
-    juegosEmpatados = 0,
-    juegosJugados = 0,
-    billetera = 0,
-    billeteraInicial = 0,
-    apuesta = 0;
+int totalPlayer, // points of the player
+    totalDealer, // points of the dealer
+    cardToTake,     // card to take from the deck
+    gamesWon = 0,       // games won by the player
+    gamesLost = 0,      // games lost by the player
+    gamesTie = 0,       // games tied by the player
+    gamesPlayed = 0,    // games played by the player
+    wallet = 0,                 // wallet of the player
+    walletInitialAmount = 0,    // initial amount in wallet of the player
+    betAmount = 0;              // bet amount of the player
 
-bool billeteraActiva = false;
-bool apuestaActiva = false;
-var pedirCarta = String.Empty;
-var volverAJugar = String.Empty;
-var stringIngreasadoPorJugador = String.Empty;
+bool isWalletActive = false;    // is the wallet active?
+bool isBetActive = false;       // is the bet active?
 
-string[] cartasJugador = Array.Empty<string>();
-string[] cartasDealer = Array.Empty<string>();
+var askForCard = String.Empty;
+var playAgain = String.Empty;
+var stringWritedByPlayer = String.Empty;
 
-string[] Baraja = {
+string[] cardsPlayer = Array.Empty<string>(); // cards of the player in the current game
+string[] cardsDealer = Array.Empty<string>(); // cards of the dealer in the current game
+
+string[] DeckOfCards = {
     "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
     "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
     "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
     "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠",
-};
+}; // Deck of cards
 
-List<string> manoList;
+List<string> handList; // List of cards of the player or dealer. 
 
-// Selección de Idioma
+// Language Selection
 Console.WriteLine(lang.languageSelection);
 Console.WriteLine("1. English (Default)");
 Console.WriteLine("2. Español");
 Console.Write(lang.languageSelectionSelect);
-stringIngreasadoPorJugador = Console.ReadLine();
+stringWritedByPlayer = Console.ReadLine();
 
-switch (stringIngreasadoPorJugador) {
+switch (stringWritedByPlayer) {
     case "1":
     case "en":
         Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
@@ -58,106 +59,113 @@ switch (stringIngreasadoPorJugador) {
 }
 Console.Clear();
 
-// Declaracion de métodos globales
+// Import methods to be used in the game
 Random random = new();
 
-juegoInicia:
-// Inicilizando valores del juego
-// Totales a 0
-totalJugador = 0;
+// Every game starts here
+gameStart:
+// Initilize game values every time the game starts
+// Totals to zero
+totalPlayer = 0;
 totalDealer = 0;
-apuestaActiva = false;
-// Limpiar arrays de cartas
-cartasJugador = cartasJugador.Where(val => false).ToArray();
-cartasDealer = cartasDealer.Where(val => false).ToArray();
+isBetActive = false;
+// Clean player and dealer cards
+cardsPlayer = Array.Empty<string>();
+cardsDealer = Array.Empty<string>();
 
-// Jugador
-if (!billeteraActiva) {
+// Check if the wallet is active
+if (!isWalletActive) {
     Console.WriteLine($"{lang.playerWelcome}\n");
     Console.WriteLine(lang.playerWalletAsk);
     Console.WriteLine(lang.infoWalletMultiplier);
     
-    while (!billeteraActiva) {
+    while (!isWalletActive) {
         Console.Write("$");
-        stringIngreasadoPorJugador = Console.ReadLine();
-        if (!int.TryParse(stringIngreasadoPorJugador, out billetera)) {
+        stringWritedByPlayer = Console.ReadLine();
+        if (!int.TryParse(stringWritedByPlayer, out wallet)) {
             Console.WriteLine(lang.errorOnlyNumbers);
             continue;
         }
-        if (billetera == 0) {
+        if (wallet == 0) {
             Console.WriteLine(lang.errorNumberZero);
-        } else if (billetera % 50 != 0) { 
+        } else if (wallet % 50 != 0) { 
             Console.WriteLine(lang.errorFiftyMultiplier);
         } else {
-            billeteraInicial = billetera;
-            billeteraActiva = true;
+            walletInitialAmount = wallet;
+            isWalletActive = true;
         }
 
     }
 }
-
+// Clear screen after wallet is active
 Console.Clear();
-while (!apuestaActiva) {
-    Console.WriteLine($"{lang.playerBetInfoWalletRemain} ${billetera}");
+
+// Check if the player has money to bet, ask for the bet amount and then bet
+while (!isBetActive) {
+    Console.WriteLine($"{lang.playerBetInfoWalletRemain} ${wallet}");
     Console.WriteLine(lang.playerBetInfoTenMultiplier);
-    while (!apuestaActiva) {
+    while (!isBetActive) {
         Console.Write("$");
-        stringIngreasadoPorJugador = Console.ReadLine();
-        if (!int.TryParse(stringIngreasadoPorJugador, out apuesta)) {
+        stringWritedByPlayer = Console.ReadLine();
+        if (!int.TryParse(stringWritedByPlayer, out betAmount)) {
             Console.WriteLine(lang.errorOnlyNumbers);
             continue;
         }
-        if (apuesta == 0) {
+        if (betAmount == 0) {
             Console.WriteLine(lang.errorNumberZero);
-        } else if (apuesta % 10 != 0) {
+        } else if (betAmount % 10 != 0) {
             Console.WriteLine(lang.errorTenMultiplier);
-        } else if (apuesta > billetera) {
+        } else if (betAmount > wallet) {
             Console.WriteLine(lang.errorTryToBetMore);
         } else {
-            billetera -= apuesta;
-            apuestaActiva = true;
+            wallet -= betAmount;
+            isBetActive = true;
         }
     }
 }
-
+// Clear screen after bet is active
 Console.Clear();
-while (totalJugador < 21) {
+
+// Start the game. Player's part
+while (totalPlayer < 21) {
     {
-        RevisarBaraja();
+        // Always check the deck before ask for a card
+        CheckDeck();
+
+        // Ask for a card
         Console.WriteLine(lang.playerCardAsk);
-        pedirCarta = Console.ReadLine();
-        switch (pedirCarta) {
-            case "s":
-            case "S":
+        askForCard = Console.ReadLine();
+        switch (askForCard) {
+            // Player wants a card
+            case "s": // Spanish yes (si)
+            case "S": // Spanish Yes (Si)
             case "y":
             case "Y":
                 Console.Clear();
-                // Obtener carta
-                cartaATomar = random.Next(0, Baraja.Length);
-                string carta = Baraja[cartaATomar];
+                // player gets a card and adds it to the player's hand
+                cardToTake = random.Next(0, DeckOfCards.Length);
+                string card = DeckOfCards[cardToTake];
 
-                manoList = cartasJugador.ToList();
-                manoList.Add(carta);
-                cartasJugador = manoList.ToArray();
+                handList = cardsPlayer.ToList();
+                handList.Add(card);
+                cardsPlayer = handList.ToArray();
 
-                // Eliminar carta de la Baraja
-                Baraja = Baraja.Where(val => val != carta).ToArray();
+                // Remove card from the deck
+                DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
-                // Calcualr valor de la carta
-                totalJugador = CalcularMano(cartasJugador);
+                // Calculate total of the player's hand
+                totalPlayer = CalculateHand(cardsPlayer);
 
-                // Mostrar Carta en Baraja (Solo para Debug)
-                // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-                // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
-
-                // Mostrar Estado actual del jugador
+                // Show player's hand
                 Console.WriteLine();
-                Console.WriteLine($"{lang.infoTotal}: {totalJugador} | {lang.infoHand}: {string.Join(" ", cartasJugador)}");
+                Console.WriteLine($"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}");
                 Console.WriteLine();
                 break;
+            // Player doesn't want a card
             case "n":
             case "N":
-                goto jugadorTermina;
+                goto playerFinish;
+            // Player doesn't input a valid value
             default:
                 Console.WriteLine(lang.errorUseYOrN);
                 break;
@@ -165,124 +173,150 @@ while (totalJugador < 21) {
     }
 }
 
-jugadorTermina:
-if (totalJugador == 21 && cartasJugador.Length == 2) {
-    goto mensajeFinal;
+// player finish
+playerFinish:
+
+// First check if the player has a blackjack
+if (totalPlayer == 21 && cardsPlayer.Length == 2) {
+    goto gameResult;
 }
 
-// Dealer
-if (totalJugador < 22) {
+// Dealer's Part
+
+// Check player didn't lose
+if (totalPlayer < 22) {
     Console.WriteLine(lang.infoDealerPlays);
+
+    // Wait a little beat
+    Thread.Sleep(500);
+
+    // check if dealer's hand is less than 21
     while (totalDealer < 21) {
-        RevisarBaraja();
-        cartaATomar = random.Next(0, Baraja.Length);
-        string carta = Baraja[cartaATomar];
 
-        manoList = cartasDealer.ToList();
-        manoList.Add(carta);
-        cartasDealer = manoList.ToArray();
+        // Always check the deck before ask for a card
+        CheckDeck();
 
-        // Eliminar carta de la Baraja
-        Baraja = Baraja.Where(val => val != carta).ToArray();
+        // Dealer's gets a card and adds it to the dealer's hand
+        cardToTake = random.Next(0, DeckOfCards.Length);
+        string card = DeckOfCards[cardToTake];
 
-        // Calcular valor de la carta
-        totalDealer = CalcularMano(cartasDealer);
+        handList = cardsDealer.ToList();
+        handList.Add(card);
+        cardsDealer = handList.ToArray();
 
-        // Mostrar Carta en Baraja (Solo para Debug)
-        // Console.WriteLine($"Cartas en Baraja:\n{string.Join(", ", Baraja)}");
-        // Console.WriteLine($"Cartas en Baraja {Baraja.Length}");
+        // Remove card from the deck
+        DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
-        // Mostrar estado actual del Dealer
+        // Calculate total of the dealer's hand
+        totalDealer = CalculateHand(cardsDealer);
+
+        // Show current status of the game
         Thread.Sleep(750);
         Console.Clear();
         Console.WriteLine();
         Console.WriteLine(
             $"{lang.infoPlayerHand}\n" +
-            $"{lang.infoTotal}: {totalJugador} | {lang.infoHand}: {string.Join(" ", cartasJugador)}\n\n" +
+            $"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}\n\n" +
             $"{lang.infoDealerPlays}\n\n" +
-            $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cartasDealer)}");
-        if (totalDealer > totalJugador || totalDealer > 16) {
+            $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cardsDealer)}");
+       
+        // Dealer stops when gets more than player's hand or more than 16
+        if (totalDealer > totalPlayer || totalDealer > 16) {
             break;
         }
 
     }
 }
 
-mensajeFinal:
-Console.WriteLine($"{CrearMensajeFinal(totalDealer, totalJugador)}\n");
-MostrarMarcador();
-if (billetera > 9) {
+// Game results part
+gameResult:
+
+// Show Scoreboard and some comments
+Console.WriteLine($"{CreateFinalMessage(totalDealer, totalPlayer)}\n");
+ShowScoreboard();
+
+// Verify player's wallet
+if (wallet > 9) {
+    // ask for new game if there $10 or more
     Console.WriteLine($"\n{lang.infoSoftGameOver}");
-    volverAJugar = Console.ReadLine();
+    playAgain = Console.ReadLine();
 } else {
+    // Continue to "Game Over" if there is not enough money.
     Console.WriteLine($"\n{lang.infoHardGameOver}");
     Console.ReadLine();
-    goto juegoTermina;
+    goto gameEnds;
 }
 
+// verify if the player wants to play again.
 while (true) {
-    switch (volverAJugar) {
+    switch (playAgain) {
         case "s":
         case "S":
         case "y":
         case "Y":
             Console.Clear();
-            goto juegoInicia;
+            goto gameStart;
         case "N": 
         case "n":
-            goto juegoTermina;
+            goto gameEnds;
         default:
             Console.WriteLine(lang.errorUseYOrN);
-            volverAJugar = Console.ReadLine();
+            playAgain = Console.ReadLine();
             break;
     }
 }
 
-juegoTermina:
+// Game Over part
+gameEnds:
+
+// Show final score.
 Console.Clear();
 Console.WriteLine( "┌────────────────────");
 Console.WriteLine($"│ {lang.infoFinalScore}");
-MensajeBilletera();
-MostrarMarcador();
+WalletEndMessage();
+ShowScoreboard();
 Console.WriteLine( "└────────────────────");
-if (billetera < billeteraInicial) {
+if (wallet < walletInitialAmount) {
     Console.WriteLine($"\n{lang.infoGoodLuck}");
 }
 Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
-void MostrarMarcador () {
-                                                    Console.Write($"│ {lang.infoGames}: {juegosJugados} ");
-    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {juegosGanados} ");
-    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ {lang.infoLost}: {juegosPerdidos} ");
-    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ {lang.infoTied}: {juegosEmpatados} ");
+// Show the record of games in current session.
+void ShowScoreboard () {
+                                                    Console.Write($"│ {lang.infoGames}: {gamesPlayed} ");
+    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {gamesWon} ");
+    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ {lang.infoLost}: {gamesLost} ");
+    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ {lang.infoTied}: {gamesTie} ");
     Console.ResetColor();                           Console.WriteLine("|");
 }
 
-void MensajeBilletera () { 
-    if (billetera < billeteraInicial) {
+// Show the final status of players walllet with colors for visual help.
+void WalletEndMessage () { 
+    if (wallet < walletInitialAmount) {
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYourWallet}: ${billetera}.");
+        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
         Console.ResetColor();
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYouLost} ${billeteraInicial - billetera}");
+        Console.WriteLine($"{lang.infoYouLost} ${walletInitialAmount - wallet}");
     } else {
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYourWallet}: ${billetera}.");
+        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
         Console.ResetColor();
         Console.Write("│ ");
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYouWon} ${billetera - billeteraInicial}");
+        Console.WriteLine($"{lang.infoYouWon} ${wallet - walletInitialAmount}");
     }
     Console.ResetColor();
 }
 
-int CalcularValorCarta(string carta) {
-    string valorCarta = carta.Substring(0, carta.Length - 1);
-    switch (valorCarta) {
+// Calculates the value of a single card.
+int CalculateCardValue(string carta) {
+    string cardValue = carta.Substring(0, carta.Length - 1);
+    switch (cardValue) {
         case "A":
             return 1;
         case "J":
@@ -290,44 +324,46 @@ int CalcularValorCarta(string carta) {
         case "K":
             return 10;
         default:
-            return int.Parse(valorCarta);
+            return int.Parse(cardValue);
     }
 }
 
-string CrearMensajeFinal(int totalDealer, int totalJugador) {
-    juegosJugados++;
-    if (totalJugador == 21 && cartasJugador.Length == 2) {
-        billetera += Convert.ToInt32(apuesta * 3);
-        juegosGanados++;
-        return $"{lang.infoPlayerWonWithBlackjack} ${Convert.ToInt32(apuesta * 3)}!";
-    } else if (totalJugador == 21 && totalDealer != 21) {
-        billetera += Convert.ToInt32(apuesta * 2);
-        juegosGanados++;
-        return $"{lang.infoPlayerWonWithTwentyOne} ${Convert.ToInt32(apuesta * 2)}!";
-    } else if (totalJugador > 21) {
-        juegosPerdidos++;
-        return $"{lang.infoPlayerLostWithOverTwentyOne} ${apuesta}!";
+// Create the final message based on dealer and player points and updates record of games.
+string CreateFinalMessage(int totalDealer, int totalPlayer) {
+    gamesPlayed++;
+    if (totalPlayer == 21 && cardsPlayer.Length == 2) {
+        wallet += Convert.ToInt32(betAmount * 3);
+        gamesWon++;
+        return $"{lang.infoPlayerWonWithBlackjack} ${Convert.ToInt32(betAmount * 3)}!";
+    } else if (totalPlayer == 21 && totalDealer != 21) {
+        wallet += Convert.ToInt32(betAmount * 2);
+        gamesWon++;
+        return $"{lang.infoPlayerWonWithTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
+    } else if (totalPlayer > 21) {
+        gamesLost++;
+        return $"{lang.infoPlayerLostWithOverTwentyOne} ${betAmount}!";
     } else if (totalDealer > 21) {
-        billetera += Convert.ToInt32(apuesta * 2);
-        juegosGanados++;
-        return $"{lang.infoDealerLostWithOverTwentyOne} ${Convert.ToInt32(apuesta * 2)}!";
-    } else if (totalJugador == totalDealer) {
-        billetera += apuesta;
-        juegosEmpatados++;
+        wallet += Convert.ToInt32(betAmount * 2);
+        gamesWon++;
+        return $"{lang.infoDealerLostWithOverTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
+    } else if (totalPlayer == totalDealer) {
+        wallet += betAmount;
+        gamesTie++;
         return $"{lang.infoGameTie}";
-    } else if (totalJugador < 21 && totalDealer > totalJugador) {
-        juegosPerdidos++;
-        return $"{lang.infoDealerWonWithOverPlayer} ${apuesta}";
+    } else if (totalPlayer < 21 && totalDealer > totalPlayer) {
+        gamesLost++;
+        return $"{lang.infoDealerWonWithOverPlayer} ${betAmount}";
     } else {
-        billetera += Convert.ToInt32(apuesta * 2);
-        juegosGanados++;
-        return $"{lang.infoPlayerWonWithOverDealer} ${Convert.ToInt32(apuesta * 2)}";
+        wallet += Convert.ToInt32(betAmount * 2);
+        gamesWon++;
+        return $"{lang.infoPlayerWonWithOverDealer} ${Convert.ToInt32(betAmount * 2)}";
     }
 }
 
-void RevisarBaraja () {
-    if (Baraja.Length == 0) {
-        Baraja = new string[] {
+// check if the current deck has enough cards. If there is not enough cards a new deck is "opened"
+void CheckDeck () {
+    if (DeckOfCards.Length == 0) {
+        DeckOfCards = new string[] {
             "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
             "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
             "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
@@ -337,28 +373,31 @@ void RevisarBaraja () {
     return;
 }
 
-int CalcularMano (string[] mano) {
-    int totalMano = 0;
-    int asEnMano = 0;
-    // Revisar cada carta de la mano
-    for (int i = 0; i < mano.Length; i++) {
-        int valorCarta = CalcularValorCarta(mano[i]);
-        if (valorCarta != 1) {
-            totalMano += valorCarta;
+// Check the value of hand of cards for both player and dealer
+int CalculateHand (string[] hand) {
+    int totalHand = 0;
+    int asInHand = 0;
+    // check every card in the hand.
+    for (int i = 0; i < hand.Length; i++) {
+        int cardValue = CalculateCardValue(hand[i]);
+        if (cardValue != 1) {
+            totalHand += cardValue;
         } else {
-            // Excepto los As
-            asEnMano++;
+            // except for As. These cards has an special behaviour
+            asInHand++;
         }
     }
 
-    // Revisar cada As
-    for (int a = 0; a < asEnMano; a++) {
-        if (totalMano + 11 > 21) { 
-            totalMano += 1;
+    // Every As in hand is check individually
+    // if the hand passes 21 with a value of 11 the card values 1
+    // otherwise the value of the card is 11
+    for (int a = 0; a < asInHand; a++) {
+        if (totalHand + 11 > 21) { 
+            totalHand += 1;
         } else {
-            totalMano += 11;
+            totalHand += 11;
         }
     }
 
-    return totalMano;
+    return totalHand;
 }

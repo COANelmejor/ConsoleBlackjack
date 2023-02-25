@@ -9,11 +9,11 @@ int totalPlayer, // points of the player
     gamesTie = 0,       // games tied by the player
     gamesPlayed = 0,    // games played by the player
     wallet = 0,                 // wallet of the player
-    walletInitialAmount = 0,    // initial wallet of the player
+    walletInitialAmount = 0,    // initial amount in wallet of the player
     betAmount = 0;              // bet amount of the player
 
-bool isWalletActive = false;// is the wallet active?
-bool isBetActive = false;   // is the bet active?
+bool isWalletActive = false;    // is the wallet active?
+bool isBetActive = false;       // is the bet active?
 
 var askForCard = String.Empty;
 var playAgain = String.Empty;

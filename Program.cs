@@ -160,8 +160,8 @@ while (totalPlayer < 21) {
                 totalPlayer = CalculateHand(cardsPlayer);
 
                 // Show player's hand
-                Console.WriteLine();
-                Console.WriteLine($"{lang.infoTotal}: {totalPlayer} {ShowHand.Write(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}");
+                Console.WriteLine($"\n{lang.infoPlayerHand}\n"+
+                                  $"{lang.infoTotal}: {totalPlayer} {ShowHand.Write(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}");
                 Console.WriteLine();
                 break;
             // Player doesn't want a card
@@ -216,9 +216,8 @@ if (totalPlayer < 22) {
         // Show current status of the game
         Thread.Sleep(750);
         Console.Clear();
-        Console.WriteLine();
         Console.WriteLine(
-            $"{lang.infoPlayerHand}\n" +
+            $"\n{lang.infoPlayerHand}\n" +
             $"{lang.infoTotal}: {totalPlayer} {ShowHand.Write(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}\n\n" +
             $"{lang.infoDealerPlays}\n\n" +
             $"{lang.infoTotal}: {totalDealer} {ShowHand.Write(cardsDealer, showHandInASCCIArt, useBigASCIIArtStyle)}");
@@ -235,7 +234,7 @@ if (totalPlayer < 22) {
 gameResult:
 
 // Show Scoreboard and some comments
-Console.WriteLine($"{CreateFinalMessage(totalDealer, totalPlayer)}\n");
+Console.WriteLine($"\n{CreateFinalMessage(totalDealer, totalPlayer)}\n");
 ShowScoreboard();
 
 // Verify player's wallet

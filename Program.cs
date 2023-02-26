@@ -12,8 +12,11 @@ int totalPlayer, // points of the player
     walletInitialAmount = 0,    // initial amount in wallet of the player
     betAmount = 0;              // bet amount of the player
 
-bool isWalletActive = false;    // is the wallet active?
-bool isBetActive = false;       // is the bet active?
+bool isWalletActive = false,    // is the wallet active?
+     isBetActive = false,       // is the bet active?
+     showHandInASCCIArt = true,    // Use ASCII art for show hands to the player
+     useBigASCIIArtStyle = false;   // Use Big style of ASCII Art
+
 
 var askForCard = String.Empty;
 var playAgain = String.Empty;
@@ -158,7 +161,7 @@ while (totalPlayer < 21) {
 
                 // Show player's hand
                 Console.WriteLine();
-                Console.WriteLine($"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}");
+                Console.WriteLine($"{lang.infoTotal}: {totalPlayer} {ShowHand.Write(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}");
                 Console.WriteLine();
                 break;
             // Player doesn't want a card
@@ -216,9 +219,9 @@ if (totalPlayer < 22) {
         Console.WriteLine();
         Console.WriteLine(
             $"{lang.infoPlayerHand}\n" +
-            $"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}\n\n" +
+            $"{lang.infoTotal}: {totalPlayer} {ShowHand.Write(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}\n\n" +
             $"{lang.infoDealerPlays}\n\n" +
-            $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cardsDealer)}");
+            $"{lang.infoTotal}: {totalDealer} {ShowHand.Write(cardsDealer, showHandInASCCIArt, useBigASCIIArtStyle)}");
        
         // Dealer stops when gets more than player's hand or more than 16
         if (totalDealer > totalPlayer || totalDealer > 16) {

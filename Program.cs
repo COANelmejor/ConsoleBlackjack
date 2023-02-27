@@ -235,8 +235,8 @@ if (totalPlayer < 22) {
 gameResult:
 
 // Show Scoreboard and some comments
-Console.WriteLine($"\n{CreateFinalMessage(totalDealer, totalPlayer)}\n");
-ShowScoreboard();
+Console.WriteLine($"\n{FinalMessage(totalDealer, totalPlayer)}\n");
+GameUtils.WriteScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 
 // Verify player's wallet
 if (wallet > 9) {
@@ -276,8 +276,8 @@ gameEnds:
 Console.Clear();
 Console.WriteLine( "┌────────────────────");
 Console.WriteLine($"│ {lang.infoFinalScore}");
-WalletEndMessage();
-ShowScoreboard();
+GameUtils.WriteWalletEndMessage(wallet, walletInitialAmount);
+GameUtils.WriteScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 Console.WriteLine( "└────────────────────");
 if (wallet < walletInitialAmount) {
     Console.WriteLine($"\n{lang.infoGoodLuck}");
@@ -285,39 +285,8 @@ if (wallet < walletInitialAmount) {
 Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
-// Show the record of games in current session.
-void ShowScoreboard () {
-                                                    Console.Write($"│ {lang.infoGames}: {gamesPlayed} ");
-    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {gamesWon} ");
-    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ {lang.infoLost}: {gamesLost} ");
-    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ {lang.infoTied}: {gamesTie} ");
-    Console.ResetColor();                           Console.WriteLine("|");
-}
-
-// Show the final status of players walllet with colors for visual help.
-void WalletEndMessage () { 
-    if (wallet < walletInitialAmount) {
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
-        Console.ResetColor();
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYouLost} ${walletInitialAmount - wallet}");
-    } else {
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
-        Console.ResetColor();
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYouWon} ${wallet - walletInitialAmount}");
-    }
-    Console.ResetColor();
-}
-
 // Create the final message based on dealer and player points and updates record of games.
-string CreateFinalMessage(int totalDealer, int totalPlayer) {
+string FinalMessage(int totalDealer, int totalPlayer) {
     gamesPlayed++;
     if (totalPlayer == 21 && cardsPlayer.Length == 2) {
         wallet += Convert.ToInt32(betAmount * 3);

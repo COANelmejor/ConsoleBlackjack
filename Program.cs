@@ -38,7 +38,7 @@ List<string> handList; // List of cards of the player or dealer.
 Console.WriteLine(lang.languageSelection);
 Console.WriteLine("1. English (Default)");
 Console.WriteLine("2. Español");
-Console.Write(lang.languageSelectionSelect);
+Console.Write(lang.infoSelect);
 stringWritedByPlayer = Console.ReadLine();
 
 switch (stringWritedByPlayer) {
@@ -58,6 +58,44 @@ switch (stringWritedByPlayer) {
         Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
         Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
         Console.ReadLine();
+        break;
+}
+Console.Clear();
+
+// Graphic Mode Selection
+Console.WriteLine(lang.infoGraphicModeSelect);
+Console.WriteLine($"1. {lang.infoText}");
+Console.WriteLine($"2. {lang.infoShortCards}");
+Console.WriteLine($"3. {lang.infoBigCards} ({lang.infoDefault})");
+
+Console.WriteLine($"\n{lang.infoText}\n10♦\n" +
+    $"{lang.infoShortCards}\n┌──┐\n│10│\n│ ♠│\n└──┘\n" +
+    $"{lang.infoBigCards}\n┌───────┐\n│10♦    │\n│    ♦  │\n" +
+    $"│ ♦ ♦ ♦ │\n│  ♦ ♦  │\n│ ♦ ♦ ♦ │\n│  ♦    │\n│    ♦10│\n└───────┘\n");
+Console.Write(lang.infoSelect);
+stringWritedByPlayer = Console.ReadLine();
+
+switch(stringWritedByPlayer) {
+    case "1":
+    case "text":
+        showHandInASCCIArt = false;
+        useBigASCIIArtStyle = false;
+        break;
+    case "2":
+    case "short":
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = false;
+        break;
+    case "3":
+    case "big":
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = true;
+        break;
+    default:
+        Console.WriteLine(lang.errorGraphicModeDefault);
+        Console.WriteLine(lang.infoPressEnterContinue);
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = true;
         break;
 }
 Console.Clear();

@@ -96,6 +96,7 @@ switch(stringWritedByPlayer) {
         Console.WriteLine(lang.infoPressEnterContinue);
         showHandInASCCIArt = true;
         useBigASCIIArtStyle = true;
+        Console.ReadLine();
         break;
 }
 Console.Clear();
@@ -221,6 +222,12 @@ playerFinish:
 // First check if the player has a blackjack
 if (totalPlayer == 21 && cardsPlayer.Length == 2) {
     goto gameResult;
+}
+
+if (totalPlayer == 21) {
+    Console.WriteLine(lang.infoGot21Points);
+    Console.WriteLine(lang.infoPressEnterContinue);
+    Console.ReadLine();
 }
 
 // Dealer's Part

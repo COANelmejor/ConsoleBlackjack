@@ -168,6 +168,9 @@
   <data name="infoGoodLuck" xml:space="preserve">
     <value>Buena suerte para la próxima</value>
   </data>
+  <data name="infoGot21Points" xml:space="preserve">
+    <value>¡Obtuviste 21 puntos!</value>
+  </data>
   <data name="infoGraphicModeSelect" xml:space="preserve">
     <value>Selecciona Modo Gráfico</value>
   </data>

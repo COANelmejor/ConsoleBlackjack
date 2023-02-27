@@ -214,6 +214,15 @@ namespace ConsoleBlackjack {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a You got 21 points!.
+        /// </summary>
+        public static string infoGot21Points {
+            get {
+                return ResourceManager.GetString("infoGot21Points", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Select Graphic Mode.
         /// </summary>
         public static string infoGraphicModeSelect {

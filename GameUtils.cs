@@ -141,8 +141,6 @@ public class GameUtils
             }
             line8 += card.Length == 2 ? $"│     {s}{cardValue}│" : $"│    {s}{cardValue}│";
             line9 += "└───────┘";
-
-
         }
 
         return $"\n{line1}\n{line2}\n{line3}\n{line4}\n{line5}" +

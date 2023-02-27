@@ -1,6 +1,6 @@
 # ConsoleBlackjack
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 
 Little game of Blackjack that runs in console.
 
@@ -14,7 +14,7 @@ At this moment you can clone the repo and it will work.
 
 In the near future I'll add a way to bet.
 
-Have Fun!!! :D
+Have Fun!!! 😁🃏
 
 ## Completed and To Do List
 
@@ -23,9 +23,9 @@ Have Fun!!! :D
 - [x] Track of games
 - [x] Bet
 - [x] English translation
-- [ ] ASCII Graphic for the cards
-    - [ ] Little Style
-    - [ ] Big Style
+- [x] ASCII Graphic for the cards
+    - [x] Short Card Style
+    - [x] Big Card Style
 
 ## Atributions
 

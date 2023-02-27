@@ -253,7 +253,7 @@ public class GameUtils
     }
 
     // Show the record of games in current session.
-    public static void WriteScoreboard(int gamesPlayed, int gamesWon, int gamesLost, int gamesTie)
+    public static void WriteFinalScoreboard(int gamesPlayed, int gamesWon, int gamesLost, int gamesTie)
     {
                                                         Console.Write($"│ {lang.infoGames}: {gamesPlayed} ");
         Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {gamesWon} ");

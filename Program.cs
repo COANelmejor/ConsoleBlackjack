@@ -280,8 +280,9 @@ if (totalPlayer < 22) {
 gameResult:
 
 // Show Scoreboard and some comments
-Console.WriteLine($"\n{FinalMessage(totalDealer, totalPlayer)}\n");
-GameUtils.WriteScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
+Console.WriteLine($"\n{GameFinishedMessage(totalDealer, totalPlayer)}\n");
+Console.ResetColor();
+GameUtils.WriteFinalScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 
 // Verify player's wallet
 if (wallet > 9) {
@@ -322,7 +323,7 @@ Console.Clear();
 Console.WriteLine( "┌────────────────────");
 Console.WriteLine($"│ {lang.infoFinalScore}");
 GameUtils.WriteWalletEndMessage(wallet, walletInitialAmount);
-GameUtils.WriteScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
+GameUtils.WriteFinalScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 Console.WriteLine( "└────────────────────");
 if (wallet < walletInitialAmount) {
     Console.WriteLine($"\n{lang.infoGoodLuck}");
@@ -330,34 +331,41 @@ if (wallet < walletInitialAmount) {
 Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
-// Create the final message based on dealer and player points and updates record of games.
-string FinalMessage(int totalDealer, int totalPlayer) {
+// Create a message for finished current game.
+string GameFinishedMessage(int totalDealer, int totalPlayer) {
     gamesPlayed++;
     if (totalPlayer == 21 && cardsPlayer.Length == 2) {
         wallet += Convert.ToInt32(betAmount * 3);
         gamesWon++;
+        Console.ForegroundColor= ConsoleColor.Green;
         return $"{lang.infoPlayerWonWithBlackjack} ${Convert.ToInt32(betAmount * 3)}!";
     } else if (totalPlayer == 21 && totalDealer != 21) {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Green;
         return $"{lang.infoPlayerWonWithTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
     } else if (totalPlayer > 21) {
         gamesLost++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoPlayerLostWithOverTwentyOne} ${betAmount}!";
     } else if (totalDealer > 21) {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Green;
         return $"{lang.infoDealerLostWithOverTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
     } else if (totalPlayer == totalDealer) {
         wallet += betAmount;
         gamesTie++;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         return $"{lang.infoGameTie}";
     } else if (totalPlayer < 21 && totalDealer > totalPlayer) {
         gamesLost++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoDealerWonWithOverPlayer} ${betAmount}";
     } else {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoPlayerWonWithOverDealer} ${Convert.ToInt32(betAmount * 2)}";
     }
 }

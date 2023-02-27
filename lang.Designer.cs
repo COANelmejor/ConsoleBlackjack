@@ -70,6 +70,15 @@ namespace ConsoleBlackjack {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Invalid selection. Big Cards mode selected by default..
+        /// </summary>
+        public static string errorGraphicModeDefault {
+            get {
+                return ResourceManager.GetString("errorGraphicModeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Please enter a value greater than 0.
         /// </summary>
         public static string errorNumberZero {
@@ -115,6 +124,15 @@ namespace ConsoleBlackjack {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Big Cards.
+        /// </summary>
+        public static string infoBigCards {
+            get {
+                return ResourceManager.GetString("infoBigCards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The Dealer has gone over 21. You won.
         /// </summary>
         public static string infoDealerLostWithOverTwentyOne {
@@ -138,6 +156,15 @@ namespace ConsoleBlackjack {
         public static string infoDealerWonWithOverPlayer {
             get {
                 return ResourceManager.GetString("infoDealerWonWithOverPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Default.
+        /// </summary>
+        public static string infoDefault {
+            get {
+                return ResourceManager.GetString("infoDefault", resourceCulture);
             }
         }
         
@@ -183,6 +210,24 @@ namespace ConsoleBlackjack {
         public static string infoGoodLuck {
             get {
                 return ResourceManager.GetString("infoGoodLuck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You got 21 points!.
+        /// </summary>
+        public static string infoGot21Points {
+            get {
+                return ResourceManager.GetString("infoGot21Points", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Select Graphic Mode.
+        /// </summary>
+        public static string infoGraphicModeSelect {
+            get {
+                return ResourceManager.GetString("infoGraphicModeSelect", resourceCulture);
             }
         }
         
@@ -259,11 +304,47 @@ namespace ConsoleBlackjack {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Press [Enter] to continue.
+        /// </summary>
+        public static string infoPressEnterContinue {
+            get {
+                return ResourceManager.GetString("infoPressEnterContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Select: .
+        /// </summary>
+        public static string infoSelect {
+            get {
+                return ResourceManager.GetString("infoSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Short Cards.
+        /// </summary>
+        public static string infoShortCards {
+            get {
+                return ResourceManager.GetString("infoShortCards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a End of Game. Play again? [y|n].
         /// </summary>
         public static string infoSoftGameOver {
             get {
                 return ResourceManager.GetString("infoSoftGameOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Text.
+        /// </summary>
+        public static string infoText {
+            get {
+                return ResourceManager.GetString("infoText", resourceCulture);
             }
         }
         
@@ -336,15 +417,6 @@ namespace ConsoleBlackjack {
         public static string languageSelection {
             get {
                 return ResourceManager.GetString("languageSelection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Select: .
-        /// </summary>
-        public static string languageSelectionSelect {
-            get {
-                return ResourceManager.GetString("languageSelectionSelect", resourceCulture);
             }
         }
         

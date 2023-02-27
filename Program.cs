@@ -12,8 +12,11 @@ int totalPlayer, // points of the player
     walletInitialAmount = 0,    // initial amount in wallet of the player
     betAmount = 0;              // bet amount of the player
 
-bool isWalletActive = false;    // is the wallet active?
-bool isBetActive = false;       // is the bet active?
+bool isWalletActive = false,    // is the wallet active?
+     isBetActive = false,       // is the bet active?
+     showHandInASCCIArt = true,    // Use ASCII art for show hands to the player
+     useBigASCIIArtStyle = true;   // Use Big style of ASCII Art
+
 
 var askForCard = String.Empty;
 var playAgain = String.Empty;
@@ -35,7 +38,7 @@ List<string> handList; // List of cards of the player or dealer.
 Console.WriteLine(lang.languageSelection);
 Console.WriteLine("1. English (Default)");
 Console.WriteLine("2. Español");
-Console.Write(lang.languageSelectionSelect);
+Console.Write(lang.infoSelect);
 stringWritedByPlayer = Console.ReadLine();
 
 switch (stringWritedByPlayer) {
@@ -54,6 +57,45 @@ switch (stringWritedByPlayer) {
         Console.WriteLine("Press [Enter] to continue.");
         Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
         Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+        Console.ReadLine();
+        break;
+}
+Console.Clear();
+
+// Graphic Mode Selection
+Console.WriteLine(lang.infoGraphicModeSelect);
+Console.WriteLine($"1. {lang.infoText}");
+Console.WriteLine($"2. {lang.infoShortCards}");
+Console.WriteLine($"3. {lang.infoBigCards} ({lang.infoDefault})");
+
+Console.WriteLine($"\n{lang.infoText}\n10♦\n" +
+    $"{lang.infoShortCards}\n┌──┐\n│10│\n│ ♠│\n└──┘\n" +
+    $"{lang.infoBigCards}\n┌───────┐\n│10♦    │\n│    ♦  │\n" +
+    $"│ ♦ ♦ ♦ │\n│  ♦ ♦  │\n│ ♦ ♦ ♦ │\n│  ♦    │\n│    ♦10│\n└───────┘\n");
+Console.Write(lang.infoSelect);
+stringWritedByPlayer = Console.ReadLine();
+
+switch(stringWritedByPlayer) {
+    case "1":
+    case "text":
+        showHandInASCCIArt = false;
+        useBigASCIIArtStyle = false;
+        break;
+    case "2":
+    case "short":
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = false;
+        break;
+    case "3":
+    case "big":
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = true;
+        break;
+    default:
+        Console.WriteLine(lang.errorGraphicModeDefault);
+        Console.WriteLine(lang.infoPressEnterContinue);
+        showHandInASCCIArt = true;
+        useBigASCIIArtStyle = true;
         Console.ReadLine();
         break;
 }
@@ -154,11 +196,12 @@ while (totalPlayer < 21) {
                 DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
                 // Calculate total of the player's hand
-                totalPlayer = CalculateHand(cardsPlayer);
+                totalPlayer = GameUtils.CalculateHand(cardsPlayer);
 
                 // Show player's hand
-                Console.WriteLine();
-                Console.WriteLine($"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}");
+                
+                Console.WriteLine($"\n{lang.infoPlayerHand}\n"+
+                                  $"{lang.infoTotal}: {totalPlayer} {GameUtils.ShowHand(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}");
                 Console.WriteLine();
                 break;
             // Player doesn't want a card
@@ -179,6 +222,12 @@ playerFinish:
 // First check if the player has a blackjack
 if (totalPlayer == 21 && cardsPlayer.Length == 2) {
     goto gameResult;
+}
+
+if (totalPlayer == 21) {
+    Console.WriteLine(lang.infoGot21Points);
+    Console.WriteLine(lang.infoPressEnterContinue);
+    Console.ReadLine();
 }
 
 // Dealer's Part
@@ -208,17 +257,16 @@ if (totalPlayer < 22) {
         DeckOfCards = DeckOfCards.Where(val => val != card).ToArray();
 
         // Calculate total of the dealer's hand
-        totalDealer = CalculateHand(cardsDealer);
+        totalDealer = GameUtils.CalculateHand(cardsDealer);
 
         // Show current status of the game
         Thread.Sleep(750);
         Console.Clear();
-        Console.WriteLine();
         Console.WriteLine(
-            $"{lang.infoPlayerHand}\n" +
-            $"{lang.infoTotal}: {totalPlayer} | {lang.infoHand}: {string.Join(" ", cardsPlayer)}\n\n" +
+            $"\n{lang.infoPlayerHand}\n" +
+            $"{lang.infoTotal}: {totalPlayer} {GameUtils.ShowHand(cardsPlayer, showHandInASCCIArt, useBigASCIIArtStyle)}\n\n" +
             $"{lang.infoDealerPlays}\n\n" +
-            $"{lang.infoTotal}: {totalDealer} | {lang.infoHand}: {string.Join(" ", cardsDealer)}");
+            $"{lang.infoTotal}: {totalDealer} {GameUtils.ShowHand(cardsDealer, showHandInASCCIArt, useBigASCIIArtStyle)}");
        
         // Dealer stops when gets more than player's hand or more than 16
         if (totalDealer > totalPlayer || totalDealer > 16) {
@@ -232,8 +280,9 @@ if (totalPlayer < 22) {
 gameResult:
 
 // Show Scoreboard and some comments
-Console.WriteLine($"{CreateFinalMessage(totalDealer, totalPlayer)}\n");
-ShowScoreboard();
+Console.WriteLine($"\n{GameFinishedMessage(totalDealer, totalPlayer)}\n");
+Console.ResetColor();
+GameUtils.WriteFinalScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 
 // Verify player's wallet
 if (wallet > 9) {
@@ -273,8 +322,8 @@ gameEnds:
 Console.Clear();
 Console.WriteLine( "┌────────────────────");
 Console.WriteLine($"│ {lang.infoFinalScore}");
-WalletEndMessage();
-ShowScoreboard();
+GameUtils.WriteWalletEndMessage(wallet, walletInitialAmount);
+GameUtils.WriteFinalScoreboard(gamesPlayed, gamesWon, gamesLost, gamesTie);
 Console.WriteLine( "└────────────────────");
 if (wallet < walletInitialAmount) {
     Console.WriteLine($"\n{lang.infoGoodLuck}");
@@ -282,80 +331,41 @@ if (wallet < walletInitialAmount) {
 Console.WriteLine($"\n{lang.infoExit} $_$"); //👍🏽🖐🏼🃏
 Console.ReadLine();
 
-// Show the record of games in current session.
-void ShowScoreboard () {
-                                                    Console.Write($"│ {lang.infoGames}: {gamesPlayed} ");
-    Console.ForegroundColor = ConsoleColor.Green;   Console.Write($"│ {lang.infoWon}: {gamesWon} ");
-    Console.ForegroundColor = ConsoleColor.Red;     Console.Write($"│ {lang.infoLost}: {gamesLost} ");
-    Console.ForegroundColor = ConsoleColor.Yellow;  Console.Write($"│ {lang.infoTied}: {gamesTie} ");
-    Console.ResetColor();                           Console.WriteLine("|");
-}
-
-// Show the final status of players walllet with colors for visual help.
-void WalletEndMessage () { 
-    if (wallet < walletInitialAmount) {
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
-        Console.ResetColor();
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{lang.infoYouLost} ${walletInitialAmount - wallet}");
-    } else {
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYourWallet}: ${wallet}.");
-        Console.ResetColor();
-        Console.Write("│ ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"{lang.infoYouWon} ${wallet - walletInitialAmount}");
-    }
-    Console.ResetColor();
-}
-
-// Calculates the value of a single card.
-int CalculateCardValue(string carta) {
-    string cardValue = carta.Substring(0, carta.Length - 1);
-    switch (cardValue) {
-        case "A":
-            return 1;
-        case "J":
-        case "Q":
-        case "K":
-            return 10;
-        default:
-            return int.Parse(cardValue);
-    }
-}
-
-// Create the final message based on dealer and player points and updates record of games.
-string CreateFinalMessage(int totalDealer, int totalPlayer) {
+// Create a message for finished current game.
+string GameFinishedMessage(int totalDealer, int totalPlayer) {
     gamesPlayed++;
     if (totalPlayer == 21 && cardsPlayer.Length == 2) {
         wallet += Convert.ToInt32(betAmount * 3);
         gamesWon++;
+        Console.ForegroundColor= ConsoleColor.Green;
         return $"{lang.infoPlayerWonWithBlackjack} ${Convert.ToInt32(betAmount * 3)}!";
     } else if (totalPlayer == 21 && totalDealer != 21) {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Green;
         return $"{lang.infoPlayerWonWithTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
     } else if (totalPlayer > 21) {
         gamesLost++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoPlayerLostWithOverTwentyOne} ${betAmount}!";
     } else if (totalDealer > 21) {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Green;
         return $"{lang.infoDealerLostWithOverTwentyOne} ${Convert.ToInt32(betAmount * 2)}!";
     } else if (totalPlayer == totalDealer) {
         wallet += betAmount;
         gamesTie++;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         return $"{lang.infoGameTie}";
     } else if (totalPlayer < 21 && totalDealer > totalPlayer) {
         gamesLost++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoDealerWonWithOverPlayer} ${betAmount}";
     } else {
         wallet += Convert.ToInt32(betAmount * 2);
         gamesWon++;
+        Console.ForegroundColor = ConsoleColor.Red;
         return $"{lang.infoPlayerWonWithOverDealer} ${Convert.ToInt32(betAmount * 2)}";
     }
 }
@@ -373,31 +383,4 @@ void CheckDeck () {
     return;
 }
 
-// Check the value of hand of cards for both player and dealer
-int CalculateHand (string[] hand) {
-    int totalHand = 0;
-    int asInHand = 0;
-    // check every card in the hand.
-    for (int i = 0; i < hand.Length; i++) {
-        int cardValue = CalculateCardValue(hand[i]);
-        if (cardValue != 1) {
-            totalHand += cardValue;
-        } else {
-            // except for As. These cards has an special behaviour
-            asInHand++;
-        }
-    }
 
-    // Every As in hand is check individually
-    // if the hand passes 21 with a value of 11 the card values 1
-    // otherwise the value of the card is 11
-    for (int a = 0; a < asInHand; a++) {
-        if (totalHand + 11 > 21) { 
-            totalHand += 1;
-        } else {
-            totalHand += 11;
-        }
-    }
-
-    return totalHand;
-}

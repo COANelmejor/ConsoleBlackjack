@@ -120,6 +120,9 @@
   <data name="errorFiftyMultiplier" xml:space="preserve">
     <value>Debe ser un multiplo de 50. ($50, $100, $750, etc)</value>
   </data>
+  <data name="errorGraphicModeDefault" xml:space="preserve">
+    <value>Selección Invalida. Modo Cartas Grandes seleccionado.</value>
+  </data>
   <data name="errorNumberZero" xml:space="preserve">
     <value>Ingresa un valor mayor a 0 por favor</value>
   </data>
@@ -135,6 +138,9 @@
   <data name="errorUseYOrN" xml:space="preserve">
     <value>Por favor solo usa [s|n]</value>
   </data>
+  <data name="infoBigCards" xml:space="preserve">
+    <value>Cartas Grandes</value>
+  </data>
   <data name="infoDealerLostWithOverTwentyOne" xml:space="preserve">
     <value>El Dealer se ha pasado de 21. Ganaste</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="infoDealerWonWithOverPlayer" xml:space="preserve">
     <value>El dealear tiene más que tú. Perdiste</value>
+  </data>
+  <data name="infoDefault" xml:space="preserve">
+    <value>Predeterminado</value>
   </data>
   <data name="infoExit" xml:space="preserve">
     <value>Pulsa [Enter] para salir...</value>
@@ -158,6 +167,9 @@
   </data>
   <data name="infoGoodLuck" xml:space="preserve">
     <value>Buena suerte para la próxima</value>
+  </data>
+  <data name="infoGraphicModeSelect" xml:space="preserve">
+    <value>Selecciona Modo Gráfico</value>
   </data>
   <data name="infoHand" xml:space="preserve">
     <value>Mano</value>
@@ -183,8 +195,20 @@
   <data name="infoPlayerWonWithTwentyOne" xml:space="preserve">
     <value>Llegaste a 21. Ganaste</value>
   </data>
+  <data name="infoPressEnterContinue" xml:space="preserve">
+    <value>Pulsa [Enter] para continuar</value>
+  </data>
+  <data name="infoSelect" xml:space="preserve">
+    <value>Selecciona: </value>
+  </data>
+  <data name="infoShortCards" xml:space="preserve">
+    <value>Cartas Pequeñas</value>
+  </data>
   <data name="infoSoftGameOver" xml:space="preserve">
     <value>Fin del Juego. ¿Volver a Jugar? [s|n]</value>
+  </data>
+  <data name="infoText" xml:space="preserve">
+    <value>Texto</value>
   </data>
   <data name="infoTied" xml:space="preserve">
     <value>Empatados</value>
@@ -209,9 +233,6 @@
   </data>
   <data name="languageSelection" xml:space="preserve">
     <value>Selección de idioma</value>
-  </data>
-  <data name="languageSelectionSelect" xml:space="preserve">
-    <value>Selecciona: </value>
   </data>
   <data name="playerBetInfoTenMultiplier" xml:space="preserve">
     <value>Debe ser un multiplo de 10. ($10, $20, $150, etc)</value>
